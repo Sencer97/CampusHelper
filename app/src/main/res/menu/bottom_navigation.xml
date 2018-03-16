@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_navigation_teach"
+        android:icon="@drawable/teach"
+        android:title="@string/nav_teach" />
+
+    <item
+        android:id="@+id/bottom_navigation_classmates"
+        android:icon="@drawable/classmates"
+        android:title="@string/nav_classmates" />
+
+    <item
+        android:id="@+id/bottom_navigation_message"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/nav_message" />
+
+    <item
+        android:id="@+id/bottom_navigation_college"
+        android:icon="@drawable/college"
+        android:title="@string/nav_college" />
+    <item
+        android:id="@+id/bottom_navigation_schoolfellow"
+        android:icon="@drawable/schoolfellow"
+        android:title="@string/nav_schoolfellow" />
+
+</menu>

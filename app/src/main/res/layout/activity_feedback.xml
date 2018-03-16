@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#e4dede"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/tv_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/feedback_info"
+        android:background="#e4dede"
+        android:padding="20dp" />
+
+    <EditText
+        android:id="@+id/et_advice"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox_shape"
+        android:padding="10dp"
+        android:textSize="15dp"
+        android:hint="@string/feedback_hint"
+        android:gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="0.39" />
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_margin="10dp"
+        android:background="@drawable/editbox_shape"
+        android:padding="10dp"
+        android:textSize="15dp"
+        android:hint="@string/emailhint"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_marginTop="15dp"
+        android:textColor="@android:color/white"
+        android:text="@string/submit"
+        android:textSize="20dp"
+        android:background="@drawable/arc_shape"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

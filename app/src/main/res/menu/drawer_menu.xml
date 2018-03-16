@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none"
+        >
+        <item android:title="@string/person">
+            <menu>
+                <item
+                    android:id="@+id/nav_personal"
+                    android:icon="@drawable/go"
+                    android:title="@string/personal"
+                    />
+                <item
+                    android:id="@+id/nav_relation"
+                    android:icon="@drawable/go"
+                    android:title="@string/relation"
+                    />
+            </menu>
+        </item>
+    </group>
+    <group android:checkableBehavior="none">
+        <item android:title="@string/system">
+            <menu>
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/go"
+                    android:title="@string/about"
+                    />
+                <item
+                    android:id="@+id/nav_feedback"
+                    android:icon="@drawable/go"
+                    android:title="@string/feedback"
+                    />
+                <item
+                    android:id="@+id/nav_exit"
+                    android:icon="@drawable/go"
+                    android:title="@string/exit"
+                    />
+
+            </menu>
+        </item>
+    </group>
+
+</menu>

@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">校园帮</string>
+    <string name="nav_teach">师生帮</string>
+    <string name="nav_classmates">同学帮</string>
+    <string name="nav_message">消息</string>
+    <string name="nav_college">学院帮</string>
+    <string name="nav_schoolfellow">校友帮</string>
+    <string name="login">登录</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="forgot_password">忘记密码?</string>
+    <string name="other_login">其他登录方式</string>
+    <string name="register">注册</string>
+    <string name="wechat">微信</string>
+    <string name="qq">QQ</string>
+    <string name="personal">个人中心</string>
+    <string name="relation">与我相关</string>
+    <string name="feedback">意见反馈</string>
+    <string name="setting">设置</string>
+    <string name="update">检查更新</string>
+    <string name="about">关于</string>
+    <string name="exit">退出</string>
+    <string name="person">个人</string>
+    <string name="system">系统</string>
+    <string name="version">校园帮APP V1.0</string>
+    <string name="introduce">"  校园帮APP主要目的是提高师生的工作效率和生活质量，针对同一圈子里的用户可以及时了解其他人的求助内容，并及时提供帮助。主要模块有师生帮、同学帮、学院帮和校友帮。"</string>
+    <string name="feedback_info">欢迎提出宝贵的意见和建议，您的吐槽就是我的动力~ ~</string>
+    <string name="feedback_hint">请输入您的反馈意见（200字以内）</string>
+    <string name="emailhint">您的邮箱</string>
+    <string name="submit">"提 交"</string>
+    <string name="pwd_confirm">再次输入密码</string>
+    <string name="update_head">点击修改头像</string>
+    <string name="basedata">基本资料</string>
+    <string name="nickname">用户名</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="schooldata">学籍资料</string>
+    <string name="school">学校</string>
+    <string name="depart">学院</string>
+    <string name="major">专业</string>
+    <string name="grade">年级</string>
+    <string name="individuality">个性资料</string>
+    <string name="signature">个性签名</string>
+    <string name="hobby">爱好</string>
+    <string name="exit_account">退出当前账号</string>
+    <string name="title_activity_test">TestActivity</string>
+
+
+</resources>
