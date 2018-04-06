@@ -1,12 +1,14 @@
 package com.test.campushelper.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,26 +18,40 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.test.campushelper.R;
+import com.test.campushelper.event.RefreshEvent;
+import com.test.campushelper.model.BaseModel;
+import com.test.campushelper.model.Friend;
 import com.test.campushelper.model.User;
+import com.test.campushelper.model.UserData;
+import com.test.campushelper.model.UserModel;
 import com.test.campushelper.utils.Constant;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.ConnectionStatus;
+import cn.bmob.newim.listener.ConnectListener;
+import cn.bmob.newim.listener.ConnectStatusChangeListener;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.LogInListener;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = "LoginActivity";
-    //    @BindView(R.id.iv_wechat_login)
     ImageView WeChatLogin;
-//    @BindView(R.id.iv_qq_login)
     ImageView QQLogin;
     private Button loginBtn,forgetPwdBtn,registerBtn;
     private EditText userNameET,passwordET;
@@ -78,55 +94,76 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.login:
                 //登录验证
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setTitle("提示");
+                progressDialog.setMessage("正在登录...");
+                progressDialog.setCancelable(true);
+                progressDialog.show();
                 userName = userNameET.getText().toString();
                 pwd = passwordET.getText().toString();
-                if(userName.equals("")){
-                    userNameET.setError("用户名不能为空");
-                }else if (pwd.equals("")){
-                    passwordET.setError("密码不能为空");
-                }else{
-                    BmobQuery<User> queryUser = new BmobQuery<User>();
-                    queryUser.addWhereEqualTo("userName",userName);
-                    BmobQuery<User> queryPWd = new BmobQuery<User>();
-                    queryPWd.addWhereEqualTo("password",pwd);
-                    List<BmobQuery<User>> queries = new ArrayList<BmobQuery<User>>();
-                    queries.add(queryUser);
-                    queries.add(queryPWd);
-                    BmobQuery<User> query = new BmobQuery<User>();
-                    query.and(queries);
-                    query.findObjects(new FindListener<User>() {
-                        @Override
-                        public void done(List<User> list, BmobException e) {
-                            if(e == null){
-                                if (list.size()>0){
-                                    Snackbar.make(v,"登录成功！2s后返回主界面",Snackbar.LENGTH_SHORT).show();
-//                                    LinearLayout head = (LinearLayout) getLayoutInflater().inflate(R.layout.drawer_nav_header,null);
-//                                    Button btn = head.findViewById(R.id.btn_login);
-//                                    TextView nickName = head.findViewById(R.id.tv_username);
-//                                    btn.setVisibility(View.GONE);
-//                                    nickName.setVisibility(View.VISIBLE);
-//                                    nickName.setText(userName);
-                                    Intent intent = new Intent(action);
-                                    intent.putExtra("name",userName);
-                                    sendBroadcast(intent);
-                                    MainActivity.isLogin = true;
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            finish();
-                                        }
-                                    },2000);
-                                }else{
-                                    Snackbar.make(v,"用户名或密码错误！",Snackbar.LENGTH_SHORT).show();
-                                    MainActivity.isLogin = false;
+                UserModel.getInstance().login(userName, pwd, userNameET, passwordET, new LogInListener() {
+                    @Override
+                    public void done(Object o, BmobException e) {
+                        if (e == null){
+//                            Snackbar.make(v,"登录成功！",Snackbar.LENGTH_SHORT).show();
+                            BmobQuery<UserData> queryData = new BmobQuery<UserData>();
+                            queryData.addWhereEqualTo("userName",userName);
+                            queryData.findObjects(new FindListener<UserData>() {
+                                @Override
+                                public void done(List<UserData> list, BmobException e) {
+                                    if (e == null){
+                                        Constant.curUser = list.get(0);
+                                    }
                                 }
-                            }else{
-                                MainActivity.isLogin = false;
-                                Snackbar.make(v,"登录失败！请查看网络连接~",Snackbar.LENGTH_SHORT).show();
+                        });
+                            MainActivity.isLogin = true;
+                            final User user = BmobUser.getCurrentUser(User.class);
+                            //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
+                            //判断用户是否登录，并且连接状态不是已连接，则进行连接操作
+                            if (!TextUtils.isEmpty(user.getObjectId()) &&
+                                    BmobIM.getInstance().getCurrentStatus().getCode() != ConnectionStatus.CONNECTED.getCode()) {
+                                BmobIM.connect(user.getObjectId(), new ConnectListener() {
+                                    @Override
+                                    public void done(String uid, BmobException e) {
+                                        if (e == null) {
+                                            //TODO 会话：更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
+                                            Log.d(TAG, "连接服务器成功！");
+                                            BmobIM.getInstance().updateUserInfo(new BmobIMUserInfo(user.getObjectId(),
+                                                            user.getUsername(), ""));
+                                            EventBus.getDefault().post(new RefreshEvent());
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getBaseContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                                //TODO 连接：监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
+                                BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
+                                    @Override
+                                    public void onChange(ConnectionStatus status) {
+                                        Toast.makeText(getBaseContext(),status.getMsg() ,Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, "onChange: "+BmobIM.getInstance().getCurrentStatus().getMsg());
+                                    }
+                                });
+                            }
+//                            new Handler().postDelayed(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    finish();
+//                                }
+//                            },2000);
+                        }else{
+                            if (e.getErrorCode() == 101){
+                                passwordET.setText("");
+                                toast("用户名或密码不正确~");
+                                progressDialog.dismiss();
                             }
                         }
-                    });
-                }
+                    }
+                });
+
+
                 break;
             case R.id.btn_forgot_password:
                 Snackbar.make(v,"忘记密码~",Snackbar.LENGTH_SHORT).show();

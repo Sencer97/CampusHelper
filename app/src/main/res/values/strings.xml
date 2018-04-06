@@ -43,7 +43,11 @@
     <string name="signature">个性签名</string>
     <string name="hobby">爱好</string>
     <string name="exit_account">退出当前账号</string>
-    <string name="title_activity_test">TestActivity</string>
-
-
+    <string name="myfriends">我的好友</string>
+    <string name="delete_friend">删除好友</string>
+    <string name="send_message">发消息</string>
+    <string name="search_hint">请输入要查找的用户名</string>
+    <string name="search">搜索</string>
+    <string name="add_friend">添加</string>
+    <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
 </resources>

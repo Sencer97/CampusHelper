@@ -1,6 +1,8 @@
 package com.test.campushelper.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.test.campushelper.R;
+import com.test.campushelper.model.User;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -34,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
      */
     @BindView(R.id.content)
     RelativeLayout content;
-
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,52 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    /**启动指定Activity
+     * @param target
+     * @param bundle
+     */
+    public void startActivity(Class<? extends Activity> target, Bundle bundle) {
+        Intent intent = new Intent();
+        intent.setClass(this, target);
+        if (bundle != null)
+            intent.putExtra(this.getPackageName(), bundle);
+        startActivity(intent);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+    @Subscribe
+    public void onEvent(Boolean empty){
+
+    }
+    public void toast(final Object obj) {
+        if (toast == null)
+            toast = Toast.makeText(BaseActivity.this, null,Toast.LENGTH_SHORT);
+            toast.setText(obj.toString());
+            toast.show();
+    }
+    public Bundle getBundle() {
+        if (getIntent() != null && getIntent().hasExtra(getPackageName()))
+            return getIntent().getBundleExtra(getPackageName());
+        else
+            return null;
+    }
+
+    /**
+     * 获得当前用户的UID
+     * @return
+     */
+    public String getCurrentUid(){
+        return BmobUser.getCurrentUser(User.class).getObjectId();
+    }
     /**
      *  隐藏toolbar
      */

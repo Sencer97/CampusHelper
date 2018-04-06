@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_chat_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/matrix_angle_shape"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/gray_btn_bg_color"
+        android:text="2018.3.18"
+        />
+    <RelativeLayout
+        android:id="@+id/ll_msg_left"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_chat_left"
+            android:src="@drawable/head"
+            android:layout_marginLeft="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <com.github.library.bubbleview.BubbleTextView
+            android:id="@+id/tv_msg_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/civ_chat_left"
+            android:padding="10dp"
+            android:text="Hello BubbleTextVewBubbleTextVew"
+            android:textColor="@android:color/black"
+            app:angle="8dp"
+            app:arrowCenter="true"
+            app:arrowHeight="10dp"
+            app:arrowLocation="left"
+            app:arrowPosition="14dp"
+            app:arrowWidth="8dp"
+            app:bubbleColor="@android:color/white" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_msg_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="48dp"
+        android:orientation="horizontal">
+
+        <com.github.library.bubbleview.BubbleTextView
+            android:id="@+id/tv_msg_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="7dp"
+            android:layout_marginLeft="48dp"
+            android:layout_toStartOf="@+id/civ_chat_right"
+            android:padding="10dp"
+            android:text="Hello BubbleTextVew "
+            android:textColor="@android:color/white"
+            app:angle="8dp"
+            app:arrowCenter="true"
+            app:arrowHeight="10dp"
+            app:arrowLocation="right"
+            app:arrowPosition="14dp"
+            app:arrowWidth="8dp"
+            app:bubbleColor="@color/colorAccent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_chat_right"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/head" />
+    </RelativeLayout>
+</LinearLayout>

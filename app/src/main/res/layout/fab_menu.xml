@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <jahirfiquitiva.libs.fabsmenu.FABsMenuLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fab:fabs_menu_overlayColor="#4d000000"
+        fab:fabs_menu_clickableOverlay="true"
+        tools:layout_behavior="@string/fabs_menu_layout_behavior">
+
+        <jahirfiquitiva.libs.fabsmenu.FABsMenu
+            android:id="@+id/fabs_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:clipChildren="false"
+            fab:fab_expandDirection="up"
+            fab:fab_labelsPosition="left"
+            fab:fab_menuMargins="24dp"
+            fab:fab_moreButtonBackgroundColor="@color/colorPrimary"
+            fab:fab_moreButtonPlusIcon="@drawable/ic_add_white_24dp"
+            fab:fab_moreButtonSize="normal">
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/fab_menu_study"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:backgroundTint="@color/colorPrimary"
+                fab:fabSize="mini"
+                fab:fab_title="学习园地"
+                fab:srcCompat="@drawable/ic_txt_white_24dp" />
+
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/fab_menu_fond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:backgroundTint="@color/colorPrimary"
+                fab:fabSize="mini"
+                fab:fab_title="寻物启事"
+                fab:srcCompat="@drawable/ic_fond_white_24dp" />
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/fab_menu_py"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:backgroundTint="@color/colorPrimary"
+                fab:fabSize="mini"
+                fab:fab_title="二手交易"
+                fab:srcCompat="@drawable/ic_py_white_24dp" />
+            <jahirfiquitiva.libs.fabsmenu.TitleFAB
+                android:id="@+id/fab_menu_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:backgroundTint="@color/colorPrimary"
+                fab:fabSize="mini"
+                fab:fab_title="其他"
+                fab:srcCompat="@drawable/ic_more_white_24dp" />
+        </jahirfiquitiva.libs.fabsmenu.FABsMenu>
+
+    </jahirfiquitiva.libs.fabsmenu.FABsMenuLayout>
+
+</LinearLayout>

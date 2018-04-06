@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.test.campushelper.R;
+import com.test.campushelper.utils.Constant;
+
+import cn.bmob.v3.Bmob;
 
 public class TeachFragment extends Fragment{
 
@@ -15,6 +18,7 @@ public class TeachFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         group = (ViewGroup) inflater.inflate(R.layout.fragment_teach,container,false);
+        Bmob.initialize(getContext(), Constant.BMOB_APPKEY);
         return group;
     }
 }

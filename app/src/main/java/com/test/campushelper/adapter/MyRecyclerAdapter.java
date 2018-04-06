@@ -6,15 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.campushelper.R;
-import com.test.campushelper.activity.Message;
+import com.test.campushelper.model.Message;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
+/**
+ *  聊天和通知列表适配器
+ */
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.MyHolder>{
 
@@ -30,7 +33,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
 
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_message,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_message,parent,false);
         MyHolder holder = new MyHolder(view);
         return holder;
     }
@@ -40,7 +43,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
         final Message message = list.get(position);
         holder.headView.setImageResource(message.getHeadId());
         holder.nickName.setText(message.getNickName());
-        holder.text.setText(message.getMessage());
+        holder.text.setText(message.getContent());
         holder.time.setText(message.getTime());
         if(mItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -2,26 +2,36 @@ package com.test.campushelper.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.test.campushelper.R;
+import com.test.campushelper.event.FinishEvent;
+import com.test.campushelper.model.Friend;
 import com.test.campushelper.model.User;
 import com.test.campushelper.model.UserData;
+import com.test.campushelper.model.UserModel;
 import com.test.campushelper.utils.Constant;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class RegisterActivity extends BaseActivity {
+    private static final String TAG = "RegisterActivity";
 
     private Button registerBtn;
     private EditText et_user,et_password,et_confirm_pwd;
@@ -46,68 +56,21 @@ public class RegisterActivity extends BaseActivity {
                 userName = et_user.getText().toString();
                 pwd = et_password.getText().toString();
                 confirmPwd = et_confirm_pwd.getText().toString();
-                if(userName.equals("")){
-                    et_user.setError("用户名不能为空");
-                    return;
-                }else if(pwd.equals("")){
-                    et_password.setError("密码不能为空");
-                    return;
-                }else if(!pwd.equals(confirmPwd)){
-                    et_confirm_pwd.setError("密码不一致！");
-                    et_confirm_pwd.setText("");
-                    return;
-                }else{
-                    //先查询是否已注册
-                    BmobQuery<User> query = new BmobQuery<User>();
-                    query.addWhereEqualTo("userName",userName);
-                    query.findObjects(new FindListener<User>() {
-                        @Override
-                        public void done(final List<User> list, BmobException e) {
-                            if(e == null){
-                                if(list.size()>0){
-                                    Toast.makeText(getBaseContext(),"用户名已存在！请更换...",Toast.LENGTH_SHORT).show();
-                                }else{
-                                    final User user = new User("",userName,pwd);
-                                    user.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if(e == null){
-                                                String userID = user.getObjectId();
-                                                user.setValue("id",userID);
-                                                user.update(userID, new UpdateListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                    }
-                                                });
-                                                Toast.makeText(getBaseContext(),"注册成功！",Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                    //创建账户的同时 创建个人信息数据对象
-                                    final UserData userData = new UserData("",userName,"","","","",""
-                                    ,"","","");
-                                    userData.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String s, BmobException e) {
-                                            if(e == null){
-                                                String userDataID = userData.getObjectId();
-                                                userData.setValue("id",userDataID);
-                                                userData.update(userDataID, new UpdateListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
+                UserModel.getInstance().register(userName, pwd, confirmPwd,
+                        et_user, et_password, et_confirm_pwd,
+                        new LogInListener() {
+                            @Override
+                            public void done(Object o, BmobException e) {
+                                if (e == null) {
+                                    EventBus.getDefault().post(new FinishEvent());
+                                    toast("注册成功！");
                                     finish();
+                                }else {
+                                    Log.d(TAG, "注册失败....");
+                                    toast(e.getMessage() + "(" + e.getErrorCode() + ")");
                                 }
-                            }else{
-                                Toast.makeText(getBaseContext(),"注册失败！请查看网络连接~",Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
-                }
+                        });
 
             }
         });

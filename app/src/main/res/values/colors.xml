@@ -2,10 +2,11 @@
 <resources>
     <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#4CAF50</color>
-    <color name="colorAccent">#00BCD4</color>
+    <color name="colorAccent">#7EC0EE</color>
     <color name="item1">#03fa97</color>
     <color name="item2">#00e2ff</color>
     <color name="item3">#9501ff</color>
     <color name="line">#e6dddd</color>
     <color name="text_normal">#8a8a8a</color>
+    <color name="bubble">#7EC0EE</color>
 </resources>

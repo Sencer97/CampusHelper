@@ -1,7 +1,6 @@
 package com.test.campushelper.fragment;
 
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -16,16 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.test.campushelper.R;
-import com.test.campushelper.activity.Message;
+import com.test.campushelper.model.Message;
 import com.test.campushelper.adapter.MyRecyclerAdapter;
+import com.test.campushelper.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import cn.bmob.v3.Bmob;
 
 public class MessageFragment extends Fragment implements View.OnClickListener{
     private View group;
@@ -41,8 +41,8 @@ public class MessageFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         group =  inflater.inflate(R.layout.fragment_message,container,false);
+        Bmob.initialize(getContext(), Constant.BMOB_APPKEY);
         init();
-        ButterKnife.bind(group);
         return group;
     }
 
@@ -69,7 +69,7 @@ public class MessageFragment extends Fragment implements View.OnClickListener{
             public void onItemClick(View view, int p) {
                     Message m = data.get(p);
 
-                    Snackbar.make(view,"你点击了----"+m.getMessage(),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view,"你点击了----"+m.getContent(),Snackbar.LENGTH_SHORT).show();
             }
         });
         chatAdapter.setOnItemLongClickListener(new MyRecyclerAdapter.OnItemLongClickListener() {

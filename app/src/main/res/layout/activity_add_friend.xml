@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.test.campushelper.activity.AddFriendActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+        >
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/editbox_shape"
+            android:hint="@string/search_hint"
+            android:padding="10dp"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/matrix_angle_shape"
+            android:text="@string/search"
+            android:textColor="@android:color/white"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_search_result"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="12dp"
+            android:src="@drawable/head"
+            android:id="@+id/civ_result_head" />
+        <!--显示联系人信息-->
+        <TextView
+            android:id="@+id/tv_result_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/civ_result_head"
+            android:layout_toEndOf="@+id/civ_result_head"
+            android:gravity="center_vertical"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/civ_result_head"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/matrix_angle_shape"
+            android:text="@string/add_friend"
+            android:textColor="@android:color/white"
+            android:textSize="18dp" />
+    </RelativeLayout>
+
+</LinearLayout>

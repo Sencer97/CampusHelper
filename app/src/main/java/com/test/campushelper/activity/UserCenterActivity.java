@@ -22,12 +22,15 @@ import android.widget.Toast;
 
 import com.test.campushelper.R;
 import com.test.campushelper.model.UserData;
+import com.test.campushelper.model.UserModel;
+import com.test.campushelper.utils.Constant;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import cn.bmob.newim.BmobIM;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -47,6 +50,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     protected static Uri tempUri;
     private static final int CROP_SMALL_PICTURE = 2;
     private Bitmap mBitmap;
+    private UserData curUser = Constant.curUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +59,42 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
         setTitle("个人中心");
         setBackArrow();
         init();
+        initData();
     }
 
+    private void initData() {
+        if (MainActivity.isLogin){
+            new Thread(){
+                @Override
+                public void run(){
+                    BmobQuery<UserData> query = new BmobQuery<UserData>();
+                    query.addWhereEqualTo("userName",curUser.getUserName());
+                    query.findObjects(new FindListener<UserData>() {
+                        @Override
+                        public void done(List<UserData> list, BmobException e) {
+                            if(e==null){
+                                curUser = list.get(0);
+                                tv_nickname.setText(curUser.getUserName());
+                                tv_sex.setText(curUser.getSex());
+                                tv_birthday.setText(curUser.getBirthday());
+                                tv_school.setText(curUser.getSchool());
+                                tv_depart.setText(curUser.getDepart());
+                                tv_major.setText(curUser.getMajor());
+                                tv_grade.setText(curUser.getGrade());
+                                tv_signature.setText(curUser.getSignature());
+                                tv_hobby.setText(curUser.getHobby());
+                            }
+                        }
+                    });
+                }
+            }.start();
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
-        if (MainActivity.isLogin){
-           tv_nickname.setText(getIntent().getStringExtra("nick"));
-        }else{
-            tv_nickname.setText("");
-        }
+
+        initData();
     }
 
     private void init() {
@@ -192,14 +222,13 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
      */
     public void updateUserData(final String key, final String value){
 
-
         BmobQuery<UserData> query = new BmobQuery<UserData>();
         query.addWhereEqualTo("userName",tv_nickname.getText());
         query.findObjects(new FindListener<UserData>() {
             @Override
             public void done(List<UserData> list, BmobException e) {
                 if(e == null){
-                    UserData data = list.get(0);
+                    final UserData data = list.get(0);
                     data.setValue(key,value);
                     String id = data.getId();
                     data.update(id,new UpdateListener() {
@@ -207,6 +236,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         public void done(BmobException e) {
                             if (e == null){
                                 updateFeedback("修改成功~");
+
                             }else{
                                 updateFeedback("修改失败~");
                             }
@@ -308,6 +338,9 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.isLogin = false;
+                                //TODO 连接：退出登录需要断开与IM服务器的连接
+                                UserModel.getInstance().logout();
+                                BmobIM.getInstance().disConnect();
                                 finish();
                             }
                         })

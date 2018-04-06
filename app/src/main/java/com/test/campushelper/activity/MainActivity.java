@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,18 +29,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.test.campushelper.R;
+import com.test.campushelper.event.RefreshEvent;
 import com.test.campushelper.fragment.ClassmatesFragment;
 import com.test.campushelper.fragment.CollegeFragment;
 import com.test.campushelper.fragment.MessageFragment;
 import com.test.campushelper.fragment.SchoolfellowFragment;
 import com.test.campushelper.fragment.TeachFragment;
+import com.test.campushelper.model.User;
+import com.test.campushelper.utils.Constant;
 import com.test.campushelper.view.BottomNavigationViewHelper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.ConnectionStatus;
+import cn.bmob.newim.event.MessageEvent;
+import cn.bmob.newim.event.OfflineMessageEvent;
+import cn.bmob.newim.listener.ConnectListener;
+import cn.bmob.newim.listener.ConnectStatusChangeListener;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
@@ -113,17 +130,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        
         initView();
-        IntentFilter filter = new IntentFilter(LoginActivity.action);
-        registerReceiver(broadcastReceiver, filter);
+
+
+//        IntentFilter filter = new IntentFilter(LoginActivity.action);
+//        registerReceiver(broadcastReceiver, filter);
     }
     //用广播实现传递用户名
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            nickName.setText(intent.getExtras().getString("name"));
-        }
-    };
+//    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            nickName.setText(intent.getExtras().getString("name"));
+//        }
+//    };
     public void initView() {
 
         //加载碎片页面
@@ -225,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-
          if(isLogin){
+             nickName.setText(Constant.curUser.getUserName());
              nickName.setVisibility(View.VISIBLE);
              loginBtn.setVisibility(View.GONE);
 
@@ -235,30 +255,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             loginBtn.setVisibility(View.VISIBLE);
         }
     }
+    /**
+     * 注册消息接收事件
+     *
+     * @param event
+     */
+    //TODO 消息接收：8.3、通知有在线消息接收
+    @Subscribe
+    public void onEventMainThread(MessageEvent event) {
 
+    }
+
+    /**
+     * 注册离线消息接收事件
+     *
+     * @param event
+     */
+    //TODO 消息接收：8.4、通知有离线消息接收
+    @Subscribe
+    public void onEventMainThread(OfflineMessageEvent event) {
+
+    }
+
+    /**
+     * 注册自定义消息接收事件
+     *
+     * @param event
+     */
+    //TODO 消息接收：8.5、通知有自定义消息接收
+    @Subscribe
+    public void onEventMainThread(RefreshEvent event) {
+
+    }
+    @Override
+    public void onStart() {
+    super.onStart();
+    EventBus.getDefault().register(this);
+}
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
+//        unregisterReceiver(broadcastReceiver);
         isLogin = false;
+        BmobIM.getInstance().disConnect();
+        BmobIM.getInstance().clear();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent = new Intent();
         switch (item.getItemId()){
-            case R.id.nav_personal:
+            case R.id.nav_personal:      //个人中心
                 if (isLogin){
                     Intent userIntent = new Intent(this,UserCenterActivity.class);
-                    userIntent.putExtra("nick",nickName.getText());
+//                    userIntent.putExtra("nick",nickName.getText());
                     startActivity(userIntent);
                 }else{
                     Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.nav_relation:
-                intent.setClass(this,RelativeActivity.class);
+            case R.id.nav_relation:     //与我有关
+                if (isLogin){
+                    intent.setClass(this,RelativeActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.nav_friends:      //我的好友
+                intent.setClass(this,MyfriendsActivity.class);
                 startActivity(intent);
+                if (isLogin){
+                }else{
+                  //Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.nav_about:
                 intent.setClass(this,AboutActivity.class);
