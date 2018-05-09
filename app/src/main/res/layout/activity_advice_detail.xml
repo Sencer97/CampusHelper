@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#f5f5f5"
+        tools:context="com.test.campushelper.activity.AdviceDetailActivity">
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <include layout="@layout/item_advice"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="回复区"
+                    android:textColor="@android:color/black"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    android:textSize="16dp"
+                    android:background="@android:color/white"
+                    />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+            <LinearLayout
+                android:id="@+id/ll_comment_bottom"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                >
+                <EditText
+                    android:id="@+id/et_comment_input"
+                    android:hint="说点什么吧..."
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:textSize="12dp"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btn_comment_send"
+                    android:layout_width="47dp"
+                    android:layout_height="34dp"
+                    android:background="@drawable/matrix_angle_shape"
+                    android:layout_margin="8dp"
+                    android:text="发送"
+                    android:textColor="@android:color/white" />
+        </LinearLayout>
+</LinearLayout>
