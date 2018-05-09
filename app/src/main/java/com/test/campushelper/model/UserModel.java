@@ -1,17 +1,10 @@
 package com.test.campushelper.model;
 
 
-import android.os.Handler;
-import android.support.design.widget.Snackbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.test.campushelper.activity.MainActivity;
 import com.test.campushelper.listener.QueryUserListener;
 import com.test.campushelper.listener.UpdateCacheListener;
-import com.test.campushelper.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +14,6 @@ import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.event.MessageEvent;
-import cn.bmob.newim.listener.BmobListener1;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -29,8 +21,6 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-
-import static cn.bmob.v3.BmobUser.getCurrentUser;
 
 public class UserModel extends BaseModel {
     private static final String TAG = "UserModel";
@@ -49,27 +39,10 @@ public class UserModel extends BaseModel {
      * @param userName
      * @param pwd
      * @param confirmPwd
-     * @param et_user
-     * @param et_password
-     * @param et_confirm_pwd
      * @param listener
      */
-    public void register(final String userName,final String pwd,final String confirmPwd,
-                         EditText et_user,EditText et_password,EditText et_confirm_pwd,
-                         final LogInListener listener) {
-        if (TextUtils.isEmpty(userName)) {
-            et_user.setError("用户名不能为空");
-            return;
-        }
-        if (TextUtils.isEmpty(pwd)) {
-            et_password.setError("密码不能为空");
-            return;
-        }
-        if (!pwd.equals(confirmPwd)) {
-            et_confirm_pwd.setError("密码不一致！");
-            et_confirm_pwd.setText("");
-            return;
-        }
+    public void register(final String userName, final String pwd, final String confirmPwd,
+                         final LogInListener listener, final String role) {
             final User user = new User();
             user.setUsername(userName);
             user.setPassword(pwd);
@@ -85,15 +58,17 @@ public class UserModel extends BaseModel {
                             public void done(BmobException e) {
                             }
                         });
+
                         //创建账户的同时 创建个人信息数据对象
                         final UserData userData = new UserData("",userName,"","","","",""
-                                ,"","","",new ArrayList<Friend>());
+                                ,"","","",new ArrayList<Friend>(),role,"");
                         userData.save(new SaveListener<String>() {
                             @Override
                             public void done(String s, BmobException e) {
                                 if(e == null){
                                     String userDataID = userData.getObjectId();
                                     userData.setValue("id",userDataID);
+                                    userData.setValue("role",role);
                                     userData.update(userDataID, new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
@@ -120,14 +95,7 @@ public class UserModel extends BaseModel {
      * @param password
      * @param listener
      */
-    public void login(final String  username, String password, EditText et_user,EditText et_password,final LogInListener listener) {
-
-        if(username.equals("")){
-            et_user.setError("用户名不能为空");
-        }
-        if (password.equals("")){
-            et_password.setError("密码不能为空");
-        }
+    public void login(final String  username, String password,final LogInListener listener) {
             final User user = new User();
             user.setUsername(username);
             user.setPassword(password);

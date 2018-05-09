@@ -81,6 +81,9 @@ dependencies {
     implementation 'com.zhihu.android:matisse:0.4.3'
     //图片加载框架
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+    //图片预览框架 --支持手势缩放
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
     //okhttp网络库
 //    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 //    implementation 'com.squareup.okhttp:okhttp:2.4.0'//CDN文件服务使用okhttp相关包进行文件的上传和下载（必填）

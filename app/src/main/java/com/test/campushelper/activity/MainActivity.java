@@ -1,11 +1,9 @@
 package com.test.campushelper.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -15,12 +13,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.event.RefreshEvent;
 import com.test.campushelper.fragment.ClassmatesFragment;
@@ -35,7 +31,6 @@ import com.test.campushelper.fragment.CollegeFragment;
 import com.test.campushelper.fragment.MessageFragment;
 import com.test.campushelper.fragment.SchoolfellowFragment;
 import com.test.campushelper.fragment.TeachFragment;
-import com.test.campushelper.model.User;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.view.BottomNavigationViewHelper;
 
@@ -45,25 +40,17 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.core.ConnectionStatus;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
-import cn.bmob.newim.listener.ConnectListener;
-import cn.bmob.newim.listener.ConnectStatusChangeListener;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
     private static final String TAG = "MainActivity";
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawer)
-    DrawerLayout drawerLayout;
+//    @BindView(R.id.toolbar)
+    private Toolbar toolbar;
+//    @BindView(R.id.drawer)
+    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     //碎片页面
     private List<Fragment> fragments;
@@ -73,14 +60,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CollegeFragment collegeFragment;
     private SchoolfellowFragment schoolFragment;
 
-    @BindView(R.id.view_pager_main)
-    ViewPager viewPager;
-    @BindView(R.id.bottom_navigation_bar)
-    BottomNavigationView bottomNavigationView;
+//    @BindView(R.id.view_pager_main)
+    private ViewPager viewPager;
+//    @BindView(R.id.bottom_navigation_bar)
+    private BottomNavigationView bottomNavigationView;
     private MenuItem menuItem;
 
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
+//    @BindView(R.id.nav_view)
+    private NavigationView navigationView;
 
     private CircleImageView headIcon;
     private LinearLayout nav_header;
@@ -129,11 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        
+//        ButterKnife.bind(this);
         initView();
-
-
 //        IntentFilter filter = new IntentFilter(LoginActivity.action);
 //        registerReceiver(broadcastReceiver, filter);
     }
@@ -145,6 +129,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
 //    };
     public void initView() {
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer);
+        viewPager = findViewById(R.id.view_pager_main);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
+        navigationView = findViewById(R.id.nav_view);
+
 
         //加载碎片页面
         teachFragment = new TeachFragment();
@@ -239,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_header.setOnClickListener(this);
         loginBtn = nav_header.findViewById(R.id.btn_login);
         nickName = nav_header.findViewById(R.id.tv_username);
+        headIcon = nav_header.findViewById(R.id.iv_userhead);
 
     }
 
@@ -249,10 +240,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
              nickName.setText(Constant.curUser.getUserName());
              nickName.setVisibility(View.VISIBLE);
              loginBtn.setVisibility(View.GONE);
+             //使用Glide加载头像
+             Glide.with(this)
+                     .load(Constant.curUser.getHeadUrl())
+                     .placeholder(R.drawable.ic_image_loading)
+                     .error(R.drawable.ic_empty_picture)
+                     .crossFade()
+                     .into(headIcon);
+
+
 
         }else{
             nickName.setVisibility(View.GONE);
             loginBtn.setVisibility(View.VISIBLE);
+            headIcon.setImageResource(R.drawable.head);
         }
     }
     /**
@@ -260,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @param event
      */
-    //TODO 消息接收：8.3、通知有在线消息接收
+    //TODO 消息接收：通知有在线消息接收
     @Subscribe
     public void onEventMainThread(MessageEvent event) {
 
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @param event
      */
-    //TODO 消息接收：8.4、通知有离线消息接收
+    //TODO 消息接收：通知有离线消息接收
     @Subscribe
     public void onEventMainThread(OfflineMessageEvent event) {
 
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @param event
      */
-    //TODO 消息接收：8.5、通知有自定义消息接收
+    //TODO 消息接收：通知有自定义消息接收
     @Subscribe
     public void onEventMainThread(RefreshEvent event) {
 

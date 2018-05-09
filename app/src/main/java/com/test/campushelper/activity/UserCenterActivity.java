@@ -6,35 +6,36 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.model.UserData;
 import com.test.campushelper.model.UserModel;
 import com.test.campushelper.utils.Constant;
+import com.test.campushelper.utils.PathGetter;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import cn.bmob.newim.BmobIM;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserCenterActivity extends BaseActivity implements View.OnClickListener{
@@ -73,6 +74,12 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void done(List<UserData> list, BmobException e) {
                             if(e==null){
+//                                Glide.with(getBaseContext())
+//                                        .load(curUser.getHeadUrl())
+//                                        .placeholder(R.drawable.ic_image_loading)
+//                                        .error(R.drawable.ic_empty_picture)
+//                                        .crossFade()
+//                                        .into(head);
                                 curUser = list.get(0);
                                 tv_nickname.setText(curUser.getUserName());
                                 tv_sex.setText(curUser.getSex());
@@ -93,12 +100,17 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-
         initData();
     }
-
     private void init() {
         head = findViewById(R.id.user_head);
+        //加载头像
+        Glide.with(this)
+                .load(curUser.getHeadUrl())
+                .placeholder(R.drawable.ic_image_loading)
+                .error(R.drawable.ic_empty_picture)
+                .crossFade()
+                .into(head);
         rl_nickname = findViewById(R.id.rl_nickname);
         rl_sex = findViewById(R.id.rl_sex);
         rl_birthday = findViewById(R.id.rl_birhday);
@@ -170,7 +182,6 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                 case CROP_SMALL_PICTURE:
                     if (data != null) {
                         setImageToView(data); // 让刚才选择裁剪得到的图片显示在界面上
-                        Toast.makeText(this,"修改头像成功~",Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -212,7 +223,26 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
             //这里图片是方形的，可以用一个工具类处理成圆形（很多头像都是圆形，这种工具类网上很多不再详述）
             head.setImageBitmap(mBitmap);//显示图片
             //TODO 头像上传到服务器
-            updateFeedback("头像修改成功~");
+            String filePath = PathGetter.getPath(this,tempUri);
+            final BmobFile bmobFile = new BmobFile(new File(filePath));
+            bmobFile.uploadblock(new UploadFileListener() {
+                @Override
+                public void done(BmobException e) {
+                    if(e==null){
+                        updateFeedback("头像修改成功~");
+                        curUser.setValue("headUrl",bmobFile.getFileUrl());
+                        curUser.setHeadUrl(bmobFile.getFileUrl());
+                        curUser.update(new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                Constant.curUser.setHeadUrl(bmobFile.getFileUrl());
+                            }
+                        });
+                    }else {
+                        Log.d(TAG, "done: 头像修改失败..."+e.getMessage());
+                    }
+                }
+            });
         }
     }
 

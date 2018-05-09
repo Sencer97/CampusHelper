@@ -1,15 +1,13 @@
 package com.test.campushelper.model;
 
 
-import android.net.Uri;
-
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobFile;
 
-public class ClassHelp extends BmobObject{
+public class ClassHelp extends BmobObject implements Serializable {
+    private String id;              //用于更新的id
     private String nickname;        //昵称
     private String time;            //发布时间
     private String depart;          //学院
@@ -17,14 +15,31 @@ public class ClassHelp extends BmobObject{
     private String headUrl;         //头像链接
     private boolean hasPic;         //是否有图片
     private String tag;             //便于获取所有帮助对象
-    private List<String> picUrls;  //保存的云图片文件url
+    private List<String> picUrls;   //保存的云图片文件url
     private List<String> favorList;   //点赞列表
-    private List<CommentItem> replys; //评论列表
+    private List<CommentItem> comments; //评论列表
     public ClassHelp(){
 
     }
+
     public ClassHelp(String tag){
         this.tag = tag;
+    }
+
+    public List<CommentItem> getComments() {
+        return comments;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setComments(List<CommentItem> comments) {
+        this.comments = comments;
     }
     public String getTag() {
         return tag;
@@ -56,13 +71,6 @@ public class ClassHelp extends BmobObject{
         this.favorList = favorList;
     }
 
-    public List<CommentItem> getReplys() {
-        return replys;
-    }
-
-    public void setReplys(List<CommentItem> replys) {
-        this.replys = replys;
-    }
     public String getNickname() {
         return nickname;
     }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.test.campushelper.activity.MatchDetailActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动名称："
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="16dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_match_detail_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACM"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="活动内容："
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="16dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_match_detail_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACMACMACMACMACMACMACMACMACMACMACMACMACM"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:lineSpacingExtra="3dp"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginBottom="16dp"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="#ccc"
+                android:padding="12dp"
+                android:text="报名列表"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+            <com.test.campushelper.view.ReplyListView
+                android:id="@+id/lv_attenders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.test.campushelper.view.ReplyListView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_attend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:src="@mipmap/ic_pencil_white_48dp"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+</RelativeLayout>

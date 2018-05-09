@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.model.Friend;
 
@@ -21,9 +22,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ListViewAdapter extends BaseAdapter{
     private List<Friend> list;
     private LayoutInflater inflater;
-
+    private Context context;
     public ListViewAdapter(Context context, List<Friend> list) {
         this.list = list;
+        this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
@@ -58,7 +60,13 @@ public class ListViewAdapter extends BaseAdapter{
         String word = list.get(position).getFirstLetter();
         holder.catalog.setText(word);
         holder.tv_name.setText(list.get(position).getName());
-        holder.headIcon.setImageResource(R.drawable.head);
+        //使用Glide加载头像
+        Glide.with(context)
+                .load(list.get(position).getHeadIcon())
+                .placeholder(R.drawable.ic_image_loading)
+                .error(R.drawable.ic_empty_picture)
+                .crossFade()
+                .into(holder.headIcon);
         //将相同字母开头的合并在一起
         if (position == 0) {
             //第一个是一定显示的
@@ -79,6 +87,5 @@ public class ListViewAdapter extends BaseAdapter{
         private TextView catalog;     //字母索引
         private TextView tv_name;     //好友名字
         private CircleImageView headIcon;
-        private String headUrl;
     }
 }

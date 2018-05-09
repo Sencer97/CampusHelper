@@ -32,7 +32,6 @@ public class GifSizeFilter extends Filter {
         }};
     }
 
-
     @Override
     public UncapableCause filter(Context context, Item item) {
         if (!needFiltering(context, item))

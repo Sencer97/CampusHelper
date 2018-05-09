@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,13 +19,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.test.campushelper.R;
+import com.test.campushelper.activity.ClassHelpDetailActivity;
 import com.test.campushelper.activity.ClassHelpPublishActivity;
+import com.test.campushelper.activity.FriendInfoActivity;
 import com.test.campushelper.adapter.ClassHelpAdapter;
 import com.test.campushelper.adapter.GridViewAdapter;
 import com.test.campushelper.model.ClassHelp;
-import com.test.campushelper.model.Feedback;
-import com.test.campushelper.model.Message;
-import com.test.campushelper.model.UserData;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.view.ShowPicGridView;
 
@@ -37,6 +35,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 import jahirfiquitiva.libs.fabsmenu.FABsMenu;
 import jahirfiquitiva.libs.fabsmenu.TitleFAB;
 
@@ -49,7 +48,8 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
     private ClassHelpAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isRefreshing = false;
-//    private List<String> fileUrls = new ArrayList<>();
+    private List<String> favorList;
+    private ClassHelp classHelp;
     private ShowPicGridView gridView;
     private GridViewAdapter gridViewAdapter;
 
@@ -81,41 +81,54 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemClick(View view, final int position) {
                 switch (view.getId()){
-                    //点击头像、用户名  -->进入用户信息详情
-                    case R.id.civ_help_head:
-                    case R.id.tv_help_nickname:
-                    case R.id.tv_help_department:
+                        //点击头像、用户名  -->进入用户信息详情
+                        case R.id.civ_help_head:
+                        case R.id.tv_help_nickname:
+                        case R.id.tv_help_department:
 
-                        Toast.makeText(getContext(),"进去用户信息详情",Toast.LENGTH_SHORT).show();
-                        break;
-                    //点击内容、时间 -->  进入帮助详情
-                    case R.id.tv_help_content:
-                    case R.id.tv_help_time:
+                        Intent intent = new Intent(getContext(),FriendInfoActivity.class);
+                        intent.putExtra("nickname",list_help.get(position).getNickname());
+                        intent.putExtra("isFriend",false);
+                        Log.d("friendname", "onItemClick: "+list_help.get(position).getNickname());
+                        startActivity(intent);
 
-                        Toast.makeText(getContext(),"进入帮助详情",Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.iv_ignore:
-                        //删除
-                        AlertDialog dialog = new AlertDialog.Builder(getContext()).setTitle("提示")
-                                .setMessage("确定删除该动态吗？")
-                                .setPositiveButton("是的", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        adapter.deleteData(position);
-                                    }
-                                })
-                                .setNegativeButton("不",null)
-                                .show();
-                        break;
-                    case R.id.ll_help_favor:
-                        Toast.makeText(getContext(),"点赞",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.ll_help_comment:
-                        Toast.makeText(getContext(),"评论一下",Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.ll_help_share:
-                        Toast.makeText(getContext(),"转发一下",Toast.LENGTH_SHORT).show();
-                        break;
+                        //点击内容、时间、评论 -->  进入帮助详情
+                        case R.id.tv_help_content:
+                        case R.id.tv_help_time:
+                        case R.id.ll_help_comment:
+                            Intent detailIntent = new Intent(getContext(), ClassHelpDetailActivity.class);
+//                            detailIntent.putExtra("id",list_help.get(position).getId());
+                            //通过静态对象传值
+                            detailIntent.putExtra("title","帮助详情");
+                            detailIntent.putExtra("type","classhelp");
+                            Constant.curHelp = list_help.get(position);
+                            startActivity(detailIntent);
+                            break;
+                        case R.id.iv_ignore:
+                            //删除
+                            AlertDialog dialog = new AlertDialog.Builder(getContext()).setTitle("提示")
+                                    .setMessage("确定删除该动态吗？")
+                                    .setPositiveButton("是的", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            adapter.deleteData(position);
+                                        }
+                                    })
+                                    .setNegativeButton("不",null)
+                                    .show();
+                            break;
+                        case R.id.ll_help_favor:
+//                            Toast.makeText(getContext(),"点赞",Toast.LENGTH_SHORT).show();
+                            addFavor(position);
+                            break;
+                        case R.id.ll_help_share:
+//                            Toast.makeText(getContext(),"转发一下",Toast.LENGTH_SHORT).show();
+                            Constant.share(getContext(),"转发到","来自「校园帮」的分享："+list_help.get(position).getContent());
+                            break;
+//                    case R.id.gv_help_pic:
+//                        classHelp = list_help.get(position);
+//                        break;
                 }
             }
         });
@@ -148,16 +161,44 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
                             //执行刷新
 
                             refreshData();
-                            Snackbar.make(getView(), "刷新成功~", Snackbar.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"刷新成功~",Toast.LENGTH_SHORT).show();
                         }
                     }, 2000);   //转圈圈2秒
                 }
             }
         });
-
-        //显示图片的GridView  ---已在ClassHelpAdapter中实现
-
     }
+
+    /**
+     * 点赞
+     */
+    private void addFavor(int position) {
+        ClassHelp help = list_help.get(position);
+        if(help.getFavorList()!=null){
+            favorList = help.getFavorList();
+        }else{
+            favorList = new ArrayList<>();
+        }
+        //已点赞则取消
+        if (favorList.contains(Constant.curUser.getUserName())){
+            favorList.remove(Constant.curUser.getUserName());
+        }else{
+            favorList.add(Constant.curUser.getUserName());
+        }
+        help.setValue("favorList",favorList);
+        help.update(help.getId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if(e==null){
+                    Log.d("favor", "done: 点赞成功~");
+                }else{
+                    Log.d("favor", "error: 点赞失败~>>>>"+e.getMessage());
+                }
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
+
     public void refreshData() {
         BmobQuery<ClassHelp> query = new BmobQuery<>();
         query.addWhereEqualTo("tag","help");
@@ -180,24 +221,28 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
+//        rv_help.scrollToPosition(0);
     }
 
     @Override
     public void onClick(View v) {
+        Intent publicIntent = new Intent(getContext(),ClassHelpPublishActivity.class);
         switch (v.getId()){
             case R.id.fab_menu_study:
-//                Snackbar.make(v,"学习园地",Snackbar.LENGTH_SHORT).show();
-
-//                break;
+                publicIntent.putExtra("hint","随手说出你的学习困惑，或者分享你的学习经验...");
+                startActivity(publicIntent);
+                break;
             case R.id.fab_menu_fond:
-//                Snackbar.make(v,"失物招领",Snackbar.LENGTH_SHORT).show();
-
+                publicIntent.putExtra("hint","拾金不昧是优良的传统美德...");
+                startActivity(publicIntent);
+                break;
             case R.id.fab_menu_py:
-//                Snackbar.make(v,"二手交易",Snackbar.LENGTH_SHORT).show();
+                publicIntent.putExtra("hint","闲置的物品快亮出来交易吧...");
+                startActivity(publicIntent);
+                break;
             case R.id.fab_menu_other:
-
-//                Snackbar.make(v,"其他",Snackbar.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(), ClassHelpPublishActivity.class));
+                publicIntent.putExtra("hint","我有酒你有故事吗...");
+                startActivity(publicIntent);
                 break;
         }
     }

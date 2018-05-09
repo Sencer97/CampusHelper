@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@mipmap/ic_eye_white_64dp"
+        android:title="查看所有活动"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_advice_ok"
+        android:icon="@mipmap/ic_ok_white_48dp"
+        android:title="完成"
+        app:showAsAction="ifRoom" />
+</menu>

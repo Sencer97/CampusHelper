@@ -96,7 +96,22 @@
         <activity android:name=".activity.MyfriendsActivity" />
         <activity android:name=".activity.FriendInfoActivity" />
         <activity android:name=".activity.AddFriendActivity" />
-        <activity android:name=".activity.ClassHelpPublishActivity"></activity>
+        <activity android:name=".activity.ClassHelpPublishActivity" />
+        <activity android:name=".activity.ClassHelpDetailActivity" />
+        <activity android:name=".activity.BigImagePagerActivity" />
+        <activity android:name=".activity.PublishActivity" />
+        <activity android:name=".activity.ViewNoticesActivity" />
+        <activity android:name=".activity.TechActivity" />
+        <activity android:name=".activity.PublishProjectActivity" />
+        <activity android:name=".activity.ProjectDetailActivity" />
+        <activity android:name=".activity.AdviceActivity" />
+        <activity android:name=".activity.JoinActivity" />
+        <activity android:name=".activity.PublishAdviceActivity" />
+        <activity android:name=".activity.AdviceDetailActivity" />
+        <activity android:name=".activity.NewsActivity" />
+        <activity android:name=".activity.PublishNewsActivity" />
+        <activity android:name=".activity.NewsDetailActivity" />
+        <activity android:name=".activity.MatchDetailActivity"></activity>
     </application>
 
 </manifest>

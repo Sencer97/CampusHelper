@@ -1,6 +1,5 @@
 package com.test.campushelper.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -19,8 +18,9 @@ public class UserData extends BmobObject {
     private String signature;         //个性签名
     private String hobby;             //爱好
     private String id;                //objectId
-    private String headIcon;       //存在服务器中的头像url
+    private String headUrl;           //存在服务器中的头像url
     private List<Friend> friendList;      //用户的好友列表
+    private String role;            //用户角色
 
     public List<Friend> getFriendList() {
         return friendList;
@@ -30,20 +30,28 @@ public class UserData extends BmobObject {
         this.friendList = friendList;
     }
 
-    public String getHeadIcon() {
-        return headIcon;
+    public String getHeadUrl() {
+        return headUrl;
     }
 
-    public void setHeadIcon(String headIcon) {
-        this.headIcon = headIcon;
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
     }
 
     public UserData(){
     }
 
-    public UserData(String id,String userName, String sex, String birthday,
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public UserData(String id, String userName, String sex, String birthday,
                     String school, String depart, String major,
-                    String grade, String signature, String hobby, List<Friend> list) {
+                    String grade, String signature, String hobby, List<Friend> list,String role,String headUrl) {
         this.id = id;
         this.userName = userName;
         this.sex = sex;
@@ -55,6 +63,8 @@ public class UserData extends BmobObject {
         this.signature = signature;
         this.hobby = hobby;
         this.friendList = list;
+        this.role = role;
+        this.headUrl = headUrl;
     }
     public String getId() {
         return id;

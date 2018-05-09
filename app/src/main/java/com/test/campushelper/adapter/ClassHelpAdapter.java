@@ -1,20 +1,25 @@
 package com.test.campushelper.adapter;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
+import com.test.campushelper.activity.BigImagePagerActivity;
 import com.test.campushelper.model.ClassHelp;
-import com.test.campushelper.model.Message;
 import com.test.campushelper.view.ShowPicGridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,9 +46,14 @@ public class ClassHelpAdapter extends RecyclerView.Adapter<ClassHelpAdapter.Help
 
     @Override
     public void onBindViewHolder(final HelpHolder holder, final int position) {
-        ClassHelp classHelp = helpList.get(position);
+        final ClassHelp classHelp = helpList.get(position);
         //使用Glide加载头像
-
+        Glide.with(context)
+                .load(classHelp.getHeadUrl())
+                .placeholder(R.drawable.ic_image_loading)
+                .error(R.drawable.ic_empty_picture)
+                .crossFade()
+                .into(holder.head);
         holder.nickname.setText(classHelp.getNickname());
         holder.time.setText(classHelp.getTime());
         holder.depart.setText(classHelp.getDepart());
@@ -66,11 +76,24 @@ public class ClassHelpAdapter extends RecyclerView.Adapter<ClassHelpAdapter.Help
             holder.content.setOnClickListener(clickListener);
             holder.time.setOnClickListener(clickListener);
             holder.ignore.setOnClickListener(clickListener);
+//            holder.gridView.setOnClickListener(clickListener);
+            holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //TODO 查看大图
+                    Intent bigImageIntent = new Intent(context, BigImagePagerActivity.class);
+                    bigImageIntent.putStringArrayListExtra("picUrls",(ArrayList<String>) classHelp.getPicUrls());
+                    bigImageIntent.putExtra("position",position);
+                    Activity activity = (Activity) context;
+                    activity.startActivity(bigImageIntent);
+                    activity.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                }
+            });
         }
         //图片列表
         if (classHelp.isHasPic()){
             holder.gridView.setVisibility(View.VISIBLE);
-            holder.gridView.setAdapter(new GridViewAdapter(context,classHelp,true));
+            holder.gridView.setAdapter(new GridViewAdapter(context,classHelp.getPicUrls(),true));
         }else{
             holder.gridView.setVisibility(View.GONE);
         }
@@ -86,6 +109,8 @@ public class ClassHelpAdapter extends RecyclerView.Adapter<ClassHelpAdapter.Help
             str +=" 觉得很赞";
             holder.favorlist.setText(str);
             holder.ll_favorList.setVisibility(View.VISIBLE);
+        }else{
+            holder.ll_favorList.setVisibility(View.GONE);
         }
 
         //显示没有更多了

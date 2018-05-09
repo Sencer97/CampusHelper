@@ -6,9 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,20 +27,16 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
-import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadBatchListener;
-import cn.bmob.v3.listener.UploadFileListener;
 
 public class ClassHelpPublishActivity extends BaseActivity implements View.OnClickListener{
 
@@ -53,7 +48,6 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
     private FloatingActionButton fabAddPic;
     private ShowPicGridView gridView;
     private GridViewAdapter adapter;
-    private List<String> fileUrls = new ArrayList<>();
     private ClassHelp classHelp = new ClassHelp();
 
     @Override
@@ -81,6 +75,8 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
     }
     private void init() {
         et_content = findViewById(R.id.et_help_content);
+        et_content.setHint(getIntent().getStringExtra("hint"));
+
         publishBtn = findViewById(R.id.btn_publish);
         publishBtn.setOnClickListener(this);
         fabAddPic = findViewById(R.id.fab_add_pic);
@@ -92,7 +88,7 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(),"你点击了图"+position+"",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(),"你点击了图"+position+"",Toast.LENGTH_SHORT).show();
             }
         });
         adapter.setOnItemDeleteClickListener(new GridViewAdapter.onItemDeleteListener() {
@@ -123,6 +119,10 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
     public void onClick(final View v) {
         switch (v.getId()){
             case R.id.btn_publish:
+                if(et_content.getText().toString().equals("")){
+                    toast("请输入文字内容...");
+                    break;
+                }
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("提示");
                 progressDialog.setMessage("帮助发布中...");
@@ -135,8 +135,8 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
                 classHelp.setTime(Constant.getCurTime());
                 classHelp.setTag("help");
                 classHelp.setFavorList(new ArrayList<String>());
-                classHelp.setReplys(new ArrayList<CommentItem>());
-                classHelp.setHeadUrl("");
+                classHelp.setComments(new ArrayList<CommentItem>());
+                classHelp.setHeadUrl(Constant.curUser.getHeadUrl());
                 //带有图片的上传图片
 
                 if (selectedUri.size() != 0){
@@ -159,6 +159,13 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
                                             @Override
                                             public void done(String s, BmobException e) {
                                                 if (e==null){
+                                                    String id = classHelp.getObjectId();
+                                                    classHelp.setValue("id",id);
+                                                    classHelp.update(id, new UpdateListener() {
+                                                        @Override
+                                                        public void done(BmobException e) {
+                                                        }
+                                                    });
                                                     Toast.makeText(getBaseContext(),"发布成功！",Toast.LENGTH_SHORT).show();
                                                     finish();
                                                 }else{
@@ -190,6 +197,13 @@ public class ClassHelpPublishActivity extends BaseActivity implements View.OnCli
                         @Override
                         public void done(String s, BmobException e) {
                             if (e==null){
+                                String id = classHelp.getObjectId();
+                                classHelp.setValue("id",id);
+                                classHelp.update(id, new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                    }
+                                });
                                 Toast.makeText(getBaseContext(),"发布成功！",Toast.LENGTH_SHORT).show();
                                 finish();
                             }else{

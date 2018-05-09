@@ -1,11 +1,10 @@
 package com.test.campushelper.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -23,7 +22,6 @@ import com.test.campushelper.view.WordsNavigation;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
@@ -56,12 +54,10 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
 
     private void initData() {
         List<Friend> tmp = Constant.curUser.getFriendList();
-//        list.add(new Friend("Sencer"));
-//        list.add(new Friend("Tike"));
         Log.d(TAG, "initData: "+tmp);
         for (Friend f:tmp) {
             Log.d(TAG, "initData: "+f.getName());
-            list.add(new Friend(f.getName()));
+            list.add(new Friend(f.getName(),f.getHeadIcon()));
         }
         //测试数据
 //        list.add(new Friend("Sencer"));
@@ -131,7 +127,7 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
             for (Friend f:Constant.curUser.getFriendList()) {
                 Log.d(TAG, "好友: "+f.getName());
             }
-            list.add(new Friend(tmpList.get(tmpList.size()-1).getName()));
+            list.add(new Friend(tmpList.get(tmpList.size()-1).getName(),tmpList.get(tmpList.size()-1).getHeadIcon()));
             adapter.notifyDataSetChanged();
             isAdd = false;
         }

@@ -1,29 +1,17 @@
 package com.test.campushelper.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.test.campushelper.R;
 import com.test.campushelper.event.RefreshEvent;
-import com.test.campushelper.model.BaseModel;
-import com.test.campushelper.model.Friend;
 import com.test.campushelper.model.User;
 import com.test.campushelper.model.UserData;
 import com.test.campushelper.model.UserModel;
@@ -31,11 +19,8 @@ import com.test.campushelper.utils.Constant;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.ConnectionStatus;
@@ -51,13 +36,9 @@ import cn.bmob.v3.listener.LogInListener;
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = "LoginActivity";
-    ImageView WeChatLogin;
-    ImageView QQLogin;
-    private Button loginBtn,forgetPwdBtn,registerBtn;
+    private Button loginBtn,registerBtn;
     private EditText userNameET,passwordET;
     private String userName,pwd;
-    public static final String action = "jason.broadcast.action";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,43 +50,38 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void init() {
-        WeChatLogin = findViewById(R.id.iv_wechat_login);
-        QQLogin = findViewById(R.id.iv_qq_login);
         loginBtn = findViewById(R.id.login);
         userNameET = findViewById(R.id.et_username);
         passwordET = findViewById(R.id.et_password);
-        forgetPwdBtn = findViewById(R.id.btn_forgot_password);
         registerBtn = findViewById(R.id.btn_register);
 
-        WeChatLogin.setOnClickListener(this);
-        QQLogin.setOnClickListener(this);
         loginBtn.setOnClickListener(this);
-        forgetPwdBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
     }
     @Override
     public void onClick(final View v) {
         switch (v.getId()){
-            case R.id.iv_wechat_login:
-                Snackbar.make(v,"接入微信登录",Snackbar.LENGTH_SHORT).show();
-                break;
-            case R.id.iv_qq_login:
-                Snackbar.make(v,"接入QQ登录",Snackbar.LENGTH_SHORT).show();
-                break;
             case R.id.login:
                 //登录验证
+                userName = userNameET.getText().toString();
+                pwd = passwordET.getText().toString();
+                if(TextUtils.isEmpty(userName)){
+                    userNameET.setError("用户名不能为空");
+                    break;
+                }
+                if (TextUtils.isEmpty(pwd)){
+                    passwordET.setError("密码不能为空");
+                    break;
+                }
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("提示");
                 progressDialog.setMessage("正在登录...");
                 progressDialog.setCancelable(true);
                 progressDialog.show();
-                userName = userNameET.getText().toString();
-                pwd = passwordET.getText().toString();
-                UserModel.getInstance().login(userName, pwd, userNameET, passwordET, new LogInListener() {
+                UserModel.getInstance().login(userName, pwd, new LogInListener() {
                     @Override
                     public void done(Object o, BmobException e) {
                         if (e == null){
-//                            Snackbar.make(v,"登录成功！",Snackbar.LENGTH_SHORT).show();
                             BmobQuery<UserData> queryData = new BmobQuery<UserData>();
                             queryData.addWhereEqualTo("userName",userName);
                             queryData.findObjects(new FindListener<UserData>() {
@@ -147,12 +123,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                                     }
                                 });
                             }
-//                            new Handler().postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    finish();
-//                                }
-//                            },2000);
                         }else{
                             if (e.getErrorCode() == 101){
                                 passwordET.setText("");
@@ -162,11 +132,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                         }
                     }
                 });
-
-
-                break;
-            case R.id.btn_forgot_password:
-                Snackbar.make(v,"忘记密码~",Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.btn_register:
                 startActivity(new Intent(this,RegisterActivity.class));

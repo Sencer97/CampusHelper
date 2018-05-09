@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -61,12 +60,13 @@ public class AboutActivity extends Activity implements View.OnClickListener{
                 break;
 
             case R.id.fab_share:
-                //调用系统分享
+                //调用系统分享.
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_TEXT,"来自「校园帮」的分享：CampusHelper");
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent,"分享到"));
+//                Constant.share(getBaseContext(),"分享到","来自「校园帮」的分享：CampusHelper");
                 break;
         }
     }

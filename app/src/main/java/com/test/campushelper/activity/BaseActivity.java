@@ -86,9 +86,11 @@ public class BaseActivity extends AppCompatActivity {
 
     }
     public void toast(final Object obj) {
-        if (toast == null)
-            toast = Toast.makeText(BaseActivity.this, null,Toast.LENGTH_SHORT);
+        if (toast == null){
+            toast = Toast.makeText(BaseActivity.this, obj.toString(),Toast.LENGTH_SHORT);
+        }else {
             toast.setText(obj.toString());
+        }
             toast.show();
     }
     public Bundle getBundle() {
@@ -123,6 +125,17 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
+
+    /**
+     *  设置Toolbar menu
+     *
+     * @param menuId
+     */
+     public void setToolBarMenu(int menuId){
+         commonToolbar.inflateMenu(menuId);
+     }
+
+
     /**
      * menu的点击事件
      *
@@ -136,7 +149,7 @@ public class BaseActivity extends AppCompatActivity {
      * 设置左上角back按钮
      */
     public void setBackArrow() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+        final Drawable upArrow = getResources().getDrawable(R.mipmap.ic_back_white_48dp);
         //给ToolBar设置左侧的图标
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         // 给左上角图标的左边加上一个返回的图标 。对应ActionBar.DISPLAY_HOME_AS_UP

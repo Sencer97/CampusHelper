@@ -71,11 +71,32 @@
              />
     </android.support.design.widget.TextInputLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
 
+            android:text="请选择角色" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="48dp"
+            android:entries="@array/roles" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/register"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="48dp"
         android:layout_gravity="center"
         android:text="@string/register"
         android:textColor="@android:color/white"
@@ -85,4 +106,5 @@
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         />
+
 </LinearLayout>

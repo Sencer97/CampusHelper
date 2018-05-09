@@ -11,13 +11,14 @@ public class Friend implements Comparable<Friend>{
 
     }
 
-    public Friend(String name) {
+    public Friend(String name,String headIcon) {
         this.name = name;
         spell = Cn2Spell.getSpell(name);
         firstLetter = spell.substring(0,1).toUpperCase();
         if(!firstLetter.matches("[A-Z]")){       //匹配字母，正则表达式
             firstLetter = "#";
         }
+        this.headIcon = headIcon;
     }
     /**
      *  a.compareTo(b) a>b --- return 1；

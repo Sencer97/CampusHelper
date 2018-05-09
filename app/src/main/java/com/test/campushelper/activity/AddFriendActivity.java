@@ -1,9 +1,6 @@
 package com.test.campushelper.activity;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,18 +11,15 @@ import android.widget.Toast;
 
 import com.test.campushelper.R;
 import com.test.campushelper.model.Friend;
-import com.test.campushelper.model.User;
 import com.test.campushelper.model.UserData;
 import com.test.campushelper.utils.Constant;
 
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +31,7 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
     private TextView tv_friendName;
     private RelativeLayout resLayout;
     private String input;
+    private String friendHeadUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +69,7 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
                             if (list.size() > 0){
                                 UserData user = list.get(0);
                                 tv_friendName.setText(user.getUserName());
+                                friendHeadUrl = user.getHeadUrl();
                                 resLayout.setVisibility(View.VISIBLE);
                             }else {
                                 Toast.makeText(getBaseContext(),"查无此人....",Toast.LENGTH_SHORT).show();
@@ -89,6 +85,7 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
                 Friend friend = new Friend();
                 String name = tv_friendName.getText().toString();
                 friend.setName(name);
+                friend.setHeadIcon(friendHeadUrl);
                 Constant.curUser.getFriendList().add(friend);
                 BmobQuery<UserData> queryUser = new BmobQuery<>();
                 queryUser.addWhereEqualTo("userName",Constant.curUser.getUserName());

@@ -49,5 +49,25 @@
     <string name="search_hint">请输入要查找的用户名</string>
     <string name="search">搜索</string>
     <string name="add_friend">添加</string>
+    <string name="teacher_module">教师版块</string>
+    <string name="student_module">学生版块</string>
+    <string name="publish_homework">发布作业</string>
+    <string name="exam_notice">考试通知</string>
+    <string name="class_switch">调课安排</string>
+    <string name="course_question">课程答疑</string>
+    <string name="view_homework">查看通知</string>
+    <string name="ask_online">在线提问</string>
+    <string name="my_question">我的提问</string>
+    <string name="my_notices">我的通知</string>
+    <string name="publish_project">科教协同</string>
     <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
+    <string name="proj_name">项目名称：</string>
+    <string name="proj_goal">项目目标：</string>
+    <string name="proj_need">项目需求：</string>
+    <string name="proj_period">项目周期：</string>
+    <string name="proj_rep_course">可替代课程：</string>
+    <string name="proj_rep_credit">可替代学分：</string>
+    <string name="proj_rep_reason">可替代理由：</string>
+    <string name="publish">发布</string>
+    <string name="proj_study">项目学习</string>
 </resources>

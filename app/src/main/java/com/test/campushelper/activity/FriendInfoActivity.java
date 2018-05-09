@@ -2,20 +2,17 @@ package com.test.campushelper.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.model.User;
 import com.test.campushelper.model.UserData;
 import com.test.campushelper.utils.Constant;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -27,14 +24,16 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendInfoActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = "FriendInfoActivity";
-    private TextView tv_name,tv_sex,tv_school,tv_major,tv_sign;
+    private CircleImageView head;
+    private TextView tv_name,tv_sex,tv_school,tv_depart,tv_major,tv_sign;
     private Button deleteBtn,chatBtn;
-    private String name,sex,school,major,sign;
+    private String name,sex,school,depart,major,sign;
+    private boolean isFriend = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,14 +45,17 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
     }
 
     private void init() {
+        head = findViewById(R.id.civ_friend_head);
         tv_name = findViewById(R.id.tv_friend_nickname);
         tv_sex = findViewById(R.id.tv_friend_sex);
         tv_school = findViewById(R.id.tv_friend_school);
+        tv_depart = findViewById(R.id.tv_friend_depart);
         tv_major = findViewById(R.id.tv_friend_major);
         tv_sign = findViewById(R.id.tv_friend_sign);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("nickname");
+        isFriend = intent.getBooleanExtra("isFriend",true);
         tv_name.setText(name);
         // 查找数据库
         BmobQuery<UserData> query = new BmobQuery<>();
@@ -66,11 +68,20 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
                     school = list.get(0).getSchool();
                     major = list.get(0).getMajor();
                     sign = list.get(0).getSignature();
-
+                    depart = list.get(0).getDepart();
                     tv_sex.setText(sex);
                     tv_school.setText(school);
+                    tv_depart.setText(depart);
                     tv_major.setText(major);
                     tv_sign.setText(sign);
+
+                    //使用Glide加载头像
+                    Glide.with(getBaseContext())
+                            .load(list.get(0).getHeadUrl())
+                            .placeholder(R.drawable.ic_image_loading)
+                            .error(R.drawable.ic_empty_picture)
+                            .crossFade()
+                            .into(head);
                 }
             }
         });
@@ -80,6 +91,10 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
 
         deleteBtn.setOnClickListener(this);
         chatBtn.setOnClickListener(this);
+
+        if (!isFriend){
+            deleteBtn.setVisibility(View.GONE);
+        }
     }
     @Override
     public void onStart() {

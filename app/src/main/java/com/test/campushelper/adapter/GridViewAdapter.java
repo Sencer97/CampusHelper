@@ -11,21 +11,19 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
-import com.test.campushelper.model.ClassHelp;
 
-import java.net.URL;
 import java.util.List;
 
 public class GridViewAdapter extends BaseAdapter{
     private List<Uri> uriList;
+    private List<String> urlList;
     private Context context;
     private onItemDeleteListener mOnItemDeleteListener;
-    private ClassHelp help;
     private boolean isNoDelete = false;
 
-    public GridViewAdapter(Context context, ClassHelp help,boolean isNoDelete){
+    public GridViewAdapter(Context context ,List<String> urlList,boolean isNoDelete){
         this.context = context;
-        this.help = help;
+        this.urlList = urlList;
         this.isNoDelete = isNoDelete;
     }
     public GridViewAdapter(Context context,List<Uri> list){
@@ -40,8 +38,8 @@ public class GridViewAdapter extends BaseAdapter{
     @Override
     public int getCount() {
         if (isNoDelete){
-            return  help.getPicUrls().size();
-        }else{
+            return urlList.size();
+        }else {
             return uriList.size();
         }
     }
@@ -49,11 +47,10 @@ public class GridViewAdapter extends BaseAdapter{
     @Override
     public Object getItem(int position) {
         if (isNoDelete){
-            return help.getPicUrls().get(position);
+            return urlList.get(position);
         }else {
             return uriList.get(position);
         }
-
     }
 
     @Override
@@ -89,12 +86,18 @@ public class GridViewAdapter extends BaseAdapter{
         //显示图片
         if (isNoDelete){
             Glide.with(context)
-                    .load(help.getPicUrls().get(position))
+                    .load(urlList.get(position))
+                    .placeholder(R.drawable.ic_image_loading)
+                    .error(R.drawable.ic_empty_picture)
+                    .crossFade()
                     .into(viewHolder.iv_image);
             viewHolder.iv_delete.setVisibility(View.GONE);
         }else{
             Glide.with(context)
                     .load(uriList.get(position))
+                    .placeholder(R.drawable.ic_image_loading)
+                    .error(R.drawable.ic_empty_picture)
+                    .crossFade()
                     .into(viewHolder.iv_image);
             Glide.with(context)
                     .load(R.drawable.cha)

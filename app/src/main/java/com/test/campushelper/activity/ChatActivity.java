@@ -1,7 +1,6 @@
 package com.test.campushelper.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,32 +13,23 @@ import android.widget.LinearLayout;
 import com.github.library.bubbleview.BubbleTextView;
 import com.test.campushelper.R;
 import com.test.campushelper.adapter.MessageAdapter;
-import com.test.campushelper.model.Message;
-import com.test.campushelper.model.UserData;
 import com.test.campushelper.utils.Constant;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMTextMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.core.ConnectionStatus;
 import cn.bmob.newim.event.MessageEvent;
-import cn.bmob.newim.listener.ConnectListener;
-import cn.bmob.newim.listener.ConversationListener;
 import cn.bmob.newim.listener.MessageListHandler;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 public class ChatActivity extends BaseActivity implements MessageListHandler,View.OnClickListener{
     private static final String TAG = "ChatActivity";
@@ -155,7 +145,7 @@ public class ChatActivity extends BaseActivity implements MessageListHandler,Vie
         chatRecyclerView = findViewById(R.id.rv_message);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         chatRecyclerView.setLayoutManager(layoutManager);
-        messageAdapter = new MessageAdapter(msgList);
+        messageAdapter = new MessageAdapter(this,msgList);
         chatRecyclerView.setAdapter(messageAdapter);
 
         //实现复制删除

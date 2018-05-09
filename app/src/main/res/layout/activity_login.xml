@@ -37,7 +37,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         app:passwordToggleEnabled="true">
-        <!--不同于普通的EditText,这个可以在横屏时仍然显示hint-->
         <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
@@ -55,7 +54,7 @@
         android:id="@+id/login"
         android:layout_width="280dp"
         android:layout_height="39dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:layout_gravity="center"
         android:background="@drawable/arc_shape"
         android:backgroundTint="@color/colorAccent"
@@ -63,100 +62,18 @@
         android:textSize="18dp"
         android:textColor="@android:color/white"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        >
 
-        <Button
-            android:id="@+id/btn_forgot_password"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:text="@string/forgot_password"
-            android:textColor="@color/colorAccent" />
-
-        <Button
-            android:id="@+id/btn_register"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="13dp"
-            android:text="@string/register"
-            android:textColor="@color/colorAccent" />
-    </RelativeLayout>
-
-
-    <TextView
-        android:id="@+id/textView2"
+    <Button
+        android:id="@+id/btn_register"
+        android:background="@drawable/arc_shape"
+        android:backgroundTint="@color/colorAccent"
+        android:layout_width="280dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="32dp"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/other_login"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:id="@+id/iv_wechat_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:clickable="true"
-            android:src="@drawable/wechat" />
-
-        <ImageView
-            android:id="@+id/iv_qq_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="48dp"
-            android:layout_toEndOf="@+id/iv_wechat_login"
-            android:clickable="true"
-            android:src="@drawable/qq" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginTop="5dp"
-        >
-
-        <TextView
-            android:id="@+id/tv_wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/textView3"
-            android:text="@string/wechat"
-            android:textSize="10dp" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="63dp"
-            android:text="@string/qq"
-            android:textSize="10dp" />
-    </LinearLayout>
-
+        android:textSize="18dp"
+        android:text="@string/register"
+        android:textColor="@android:color/white" />
 
 
 </LinearLayout>
