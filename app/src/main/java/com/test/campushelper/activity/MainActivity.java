@@ -330,11 +330,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
             case R.id.nav_friends:      //我的好友
-                intent.setClass(this,MyfriendsActivity.class);
-                startActivity(intent);
                 if (isLogin){
+                    intent.setClass(this,MyfriendsActivity.class);
+                    startActivity(intent);
                 }else{
-                  //Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.nav_about:

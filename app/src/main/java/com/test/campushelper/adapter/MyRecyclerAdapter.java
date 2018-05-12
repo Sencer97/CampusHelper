@@ -85,7 +85,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
     public void deleteData(int position){
         list.remove(position);
         notifyItemRemoved(position);
-//        notifyDataSetChanged();
         notifyItemRangeChanged(position,list.size());
     }
     /**

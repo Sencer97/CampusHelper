@@ -59,21 +59,6 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
             Log.d(TAG, "initData: "+f.getName());
             list.add(new Friend(f.getName(),f.getHeadIcon()));
         }
-        //测试数据
-//        list.add(new Friend("Sencer"));
-//        list.add(new Friend("Bob"));
-//        list.add(new Friend("Sencer"));
-//        list.add(new Friend("Tike"));
-//        list.add(new Friend("Ass"));
-//        list.add(new Friend("小红"));
-//        list.add(new Friend("明明"));
-//        list.add(new Friend("小花"));
-//        list.add(new Friend("Lilei"));
-//        list.add(new Friend("Miket"));
-//        list.add(new Friend("SSSS"));
-//        list.add(new Friend("GGG"));
-//        list.add(new Friend("dd"));
-
         //对集合排序
         if(list.size() > 0){
             Collections.sort(list);

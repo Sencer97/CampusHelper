@@ -23,6 +23,8 @@ public class AdviceAdapter extends RecyclerView.Adapter<AdviceAdapter.AdviceHold
     private Context context;
     private OnItemClickListener mItemClickListener;
     private boolean isMatch;
+    private OnItemLongClickListener mItemLongClickListener;
+
 
     public AdviceAdapter(Context context, List<Advice> adviceList) {
         this.adviceList = adviceList;
@@ -43,7 +45,7 @@ public class AdviceAdapter extends RecyclerView.Adapter<AdviceAdapter.AdviceHold
     }
 
     @Override
-    public void onBindViewHolder(AdviceHolder holder, final int position) {
+    public void onBindViewHolder(final AdviceHolder holder, final int position) {
         if(isMatch){
             Match match = matchList.get(position);
             holder.tv_title.setText(match.getTitle());
@@ -70,6 +72,15 @@ public class AdviceAdapter extends RecyclerView.Adapter<AdviceAdapter.AdviceHold
         };
         if (mItemClickListener != null){
             holder.itemView.setOnClickListener(clickListener);
+        }
+        if(mItemLongClickListener != null){
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mItemLongClickListener.onItemLongClick(holder.itemView,position);
+                    return  true;
+                }
+            });
         }
 
     }
@@ -113,5 +124,15 @@ public class AdviceAdapter extends RecyclerView.Adapter<AdviceAdapter.AdviceHold
     //定义一个设置点击监听器的方法
     public void setOnItemClickListener(AdviceAdapter.OnItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
+    }
+
+    /**
+     * item长按回调接口
+     */
+    public interface OnItemLongClickListener{
+        void onItemLongClick(View view,int position);
+    }
+    public void setOnItemLongClickListener(OnItemLongClickListener itemLongClickListener){
+        this.mItemLongClickListener = itemLongClickListener;
     }
 }

@@ -14,6 +14,7 @@ import com.test.campushelper.model.ClassHelp;
 import com.test.campushelper.model.Match;
 import com.test.campushelper.model.News;
 import com.test.campushelper.model.Notice;
+import com.test.campushelper.model.RecruitInfo;
 import com.test.campushelper.model.TechProject;
 import com.test.campushelper.model.UserData;
 
@@ -36,6 +37,7 @@ public class Constant {
     public static Advice curAdvice = new Advice();
     public static News curNews= new News();
     public static Match curMatch = new Match();
+    public static RecruitInfo curRecruit = new RecruitInfo();
     public static String[] roles = {"student","teacher","departAdmin","schoolfellow"};
     public static Toast toast;
 

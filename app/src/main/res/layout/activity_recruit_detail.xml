@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.test.campushelper.activity.RecruitDetailActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="54dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_recruit_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_recruit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="招聘标题"
+                    android:textColor="@android:color/black"
+                    android:textSize="24dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_recruit_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="05-04 16:00" />
+
+                    <TextView
+                        android:id="@+id/tv_recruit_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/depart" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tc_recruit_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/introduce"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <com.test.campushelper.view.ShowPicGridView
+                android:id="@+id/gv_recruit_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:numColumns="3"
+                android:scrollbars="none"></com.test.campushelper.view.ShowPicGridView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@android:color/white"
+                android:padding="12dp"
+                android:text="评论区"
+                android:textColor="@android:color/black"
+                android:textSize="16dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:id="@+id/ll_comment_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_comment_input"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:hint="说点什么吧..."
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/btn_comment_send"
+                android:layout_width="47dp"
+                android:layout_height="34dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/matrix_angle_shape"
+                android:text="发送"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

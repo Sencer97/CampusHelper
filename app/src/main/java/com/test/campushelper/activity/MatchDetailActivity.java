@@ -61,7 +61,6 @@ public class MatchDetailActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //点击进入报名者信息详情
-                toast("点击了--->"+attendList.get(position).getName());
                 Intent intent = new Intent(getBaseContext(),FriendInfoActivity.class);
                 intent.putExtra("nickname",attendList.get(position).getName());
                 intent.putExtra("isFriend",false);
@@ -83,16 +82,15 @@ public class MatchDetailActivity extends BaseActivity {
                 attender.setName(Constant.curUser.getUserName());
                 attender.setTime(Constant.getCurTime());
                 attender.setHeadUrl(Constant.curUser.getHeadUrl());
+                attendList.add(attender);
+                attendAdapter.notifyDataSetChanged();
                 match.setAtteners(attendList);
                 match.update(match.getId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if(e==null){
-
-
                             toast("报名成功！");
-                            attendList.add(attender);
-                            attendAdapter.notifyDataSetChanged();
+
                         }else {
                             toast("报名失败！"+e.getMessage());
                         }

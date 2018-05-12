@@ -111,7 +111,10 @@
         <activity android:name=".activity.NewsActivity" />
         <activity android:name=".activity.PublishNewsActivity" />
         <activity android:name=".activity.NewsDetailActivity" />
-        <activity android:name=".activity.MatchDetailActivity"></activity>
+        <activity android:name=".activity.MatchDetailActivity" />
+        <activity android:name=".activity.RecruitActivity" />
+        <activity android:name=".activity.RecruitDetailActivity" />
+        <activity android:name=".activity.AddressBookActivity"></activity>
     </application>
 
 </manifest>

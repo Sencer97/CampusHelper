@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.model.Friend;
 import com.test.campushelper.model.UserData;
@@ -70,6 +71,12 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
                                 UserData user = list.get(0);
                                 tv_friendName.setText(user.getUserName());
                                 friendHeadUrl = user.getHeadUrl();
+                                Glide.with(getBaseContext())
+                                        .load(friendHeadUrl)
+                                        .placeholder(R.drawable.ic_image_loading)
+                                        .error(R.drawable.ic_empty_picture)
+                                        .crossFade()
+                                        .into(friendHeader);
                                 resLayout.setVisibility(View.VISIBLE);
                             }else {
                                 Toast.makeText(getBaseContext(),"查无此人....",Toast.LENGTH_SHORT).show();

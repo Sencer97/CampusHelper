@@ -18,7 +18,9 @@ import android.widget.EditText;
 
 import com.test.campushelper.R;
 import com.test.campushelper.adapter.GridViewAdapter;
+import com.test.campushelper.model.CommentItem;
 import com.test.campushelper.model.News;
+import com.test.campushelper.model.RecruitInfo;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.utils.GifSizeFilter;
 import com.test.campushelper.utils.PathGetter;
@@ -47,6 +49,7 @@ public class PublishNewsActivity extends BaseActivity {
     private GridViewAdapter adapter;
     private String title;
     private News news = new News();
+    private RecruitInfo recruitInfo = new RecruitInfo();
     private MenuItem menuItem;
     private EditChangedListener editChangedListener = new EditChangedListener();
 
@@ -55,7 +58,8 @@ public class PublishNewsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_publish_news);
         Bmob.initialize(this, Constant.BMOB_APPKEY);
-        setTitle("发布新闻公告");
+        title = getIntent().getStringExtra("title");         //发布新闻公告 ， 发布招聘内推
+        setTitle(title);
         setBackArrow();
         setToolBarMenu(R.menu.advice_menu);
         init();
@@ -97,11 +101,9 @@ public class PublishNewsActivity extends BaseActivity {
         gridView = findViewById(R.id.gv_show_select_pic);
         adapter = new GridViewAdapter(this,selectedUri);
         gridView.setAdapter(adapter);
-        //点击查看大图
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getBaseContext(),"你点击了图"+position+"",Toast.LENGTH_SHORT).show();
             }
         });
         adapter.setOnItemDeleteClickListener(new GridViewAdapter.onItemDeleteListener() {
@@ -148,7 +150,7 @@ public class PublishNewsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_advice_ok:
-                //发布建议
+                //发布新闻公告
                 if(TextUtils.isEmpty(et_title.getText().toString())){
                    et_title.setError("请输入标题");
                    break;
@@ -157,98 +159,184 @@ public class PublishNewsActivity extends BaseActivity {
                     et_title.setError("请输入内容");
                     break;
                 }
-                toast("发布建议");
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("提示");
                 progressDialog.setMessage("发布中...");
                 progressDialog.setCancelable(true);
                 progressDialog.show();
                 //发布通知并上传到bmob后台
-                news.setName(Constant.curUser.getUserName());
-                news.setContent(et_content.getText().toString());
-                news.setTime(Constant.getCurTime());
-                news.setDepart(Constant.curUser.getDepart());
-                news.setTag("news");
-                news.setTitle(et_title.getText().toString());
-                news.setHeadUrl(Constant.curUser.getHeadUrl());
-                //带有图片的上传图片
-                if (selectedUri.size() != 0){
-                    news.setHasPic(true);
-                    final String[] filePaths = new String[selectedUri.size()];
-                    for (int i=0;i<selectedUri.size();i++) {
-                        filePaths[i] = PathGetter.getPath(this,selectedUri.get(i));
-                    }
-                    new Thread(){
-                        @Override
-                        public void run(){
-                            BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
-                                @Override
-                                public void onSuccess(List<BmobFile> list, List<String> urls) {
-                                    if (urls.size() == filePaths.length){
-                                        //文件上传完成 保存上传的文件的url
-                                        Log.d("upload", "文件url:"+urls);
-                                        news.setPicUrls(urls);
-                                        news.save(new SaveListener<String>() {
-                                            @Override
-                                            public void done(String s, BmobException e) {
-                                                if (e==null){
-                                                    String id = news.getObjectId();
-                                                    news.setValue("id",id);
-                                                    news.update(id, new UpdateListener() {
-                                                        @Override
-                                                        public void done(BmobException e) {
-                                                        }
-                                                    });
-                                                    toast("发布成功！");
-                                                    finish();
-                                                }else{
-                                                    toast("发布失败！"+e.getMessage());
-                                                }
-                                                progressDialog.dismiss();
-                                            }
-                                        });
-                                    }
-                                }
-                                @Override
-                                public void onProgress(int i, int i1, int i2, int i3) {
-                                }
-                                @Override
-                                public void onError(int i, String s) {
-                                    Log.d("upload", "onError: "+s);
-                                }
-                            });
-                        }
-                    }.start();
 
-                }else {
-                    news.setPicUrls(new ArrayList<String>());
-                }
-                if (news.isHasPic()){
-                    //上传图片的同时 保存了--所以直接退出
-                    break;
-                }else {
-                    news.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if (e==null){
-                                String id = news.getObjectId();
-                                news.setValue("id",id);
-                                news.update(id, new UpdateListener() {
+                if(title.equals("发布新闻公告")){
+                    news.setName(Constant.curUser.getUserName());
+                    news.setContent(et_content.getText().toString());
+                    news.setTime(Constant.getCurTime());
+                    news.setDepart(Constant.curUser.getDepart());
+                    news.setTag("news");
+                    news.setTitle(et_title.getText().toString());
+                    news.setHeadUrl(Constant.curUser.getHeadUrl());
+                    //带有图片的上传图片
+                    if (selectedUri.size() != 0){
+                        news.setHasPic(true);
+                        final String[] filePaths = new String[selectedUri.size()];
+                        for (int i=0;i<selectedUri.size();i++) {
+                            filePaths[i] = PathGetter.getPath(this,selectedUri.get(i));
+                        }
+                        new Thread(){
+                            @Override
+                            public void run(){
+                                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                                     @Override
-                                    public void done(BmobException e) {
+                                    public void onSuccess(List<BmobFile> list, List<String> urls) {
+                                        if (urls.size() == filePaths.length){
+                                            //文件上传完成 保存上传的文件的url
+                                            Log.d("upload", "文件url:"+urls);
+                                            news.setPicUrls(urls);
+                                            news.save(new SaveListener<String>() {
+                                                @Override
+                                                public void done(String s, BmobException e) {
+                                                    if (e==null){
+                                                        String id = news.getObjectId();
+                                                        news.setValue("id",id);
+                                                        news.update(id, new UpdateListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                            }
+                                                        });
+                                                        toast("发布成功！");
+                                                        finish();
+                                                    }else{
+                                                        toast("发布失败！"+e.getMessage());
+                                                    }
+                                                    progressDialog.dismiss();
+                                                }
+                                            });
+                                        }
+                                    }
+                                    @Override
+                                    public void onProgress(int i, int i1, int i2, int i3) {
+                                    }
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        Log.d("upload", "onError: "+s);
                                     }
                                 });
-                                toast("发布成功！");
-                                finish();
-                            }else{
-                                toast("发布失败！");
                             }
-                            progressDialog.dismiss();
+                        }.start();
+
+                    }else {
+                        news.setPicUrls(new ArrayList<String>());
+                    }
+                    if (news.isHasPic()){
+                        //上传图片的同时 保存了--所以直接退出
+                        break;
+                    }else {
+                        news.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e==null){
+                                    String id = news.getObjectId();
+                                    news.setValue("id",id);
+                                    news.update(id, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                        }
+                                    });
+                                    toast("发布成功！");
+                                    finish();
+                                }else{
+                                    toast("发布失败！");
+                                }
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
+                }else{
+                    recruitInfo.setName(Constant.curUser.getUserName());
+                    recruitInfo.setContent(et_content.getText().toString());
+                    recruitInfo.setTime(Constant.getCurTime());
+                    recruitInfo.setTag("recruit");
+                    recruitInfo.setTitle(et_title.getText().toString());
+                    recruitInfo.setHeadUrl(Constant.curUser.getHeadUrl());
+                    recruitInfo.setComments(new ArrayList<CommentItem>());
+
+                    //带有图片的上传图片
+                    if (selectedUri.size() != 0){
+                        recruitInfo.setHasPic(true);
+                        final String[] filePaths = new String[selectedUri.size()];
+                        for (int i=0;i<selectedUri.size();i++) {
+                            filePaths[i] = PathGetter.getPath(this,selectedUri.get(i));
                         }
-                    });
+                        new Thread(){
+                            @Override
+                            public void run(){
+                                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
+                                    @Override
+                                    public void onSuccess(List<BmobFile> list, List<String> urls) {
+                                        if (urls.size() == filePaths.length){
+                                            //文件上传完成 保存上传的文件的url
+                                            Log.d("upload", "文件url:"+urls);
+                                            recruitInfo.setPicUrls(urls);
+                                            recruitInfo.save(new SaveListener<String>() {
+                                                @Override
+                                                public void done(String s, BmobException e) {
+                                                    if (e==null){
+                                                        String id = recruitInfo.getObjectId();
+                                                        recruitInfo.setValue("id",id);
+                                                        recruitInfo.update(id, new UpdateListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                            }
+                                                        });
+                                                        toast("发布成功！");
+                                                        finish();
+                                                    }else{
+                                                        toast("发布失败！"+e.getMessage());
+                                                    }
+                                                    progressDialog.dismiss();
+                                                }
+                                            });
+                                        }
+                                    }
+                                    @Override
+                                    public void onProgress(int i, int i1, int i2, int i3) {
+                                    }
+                                    @Override
+                                    public void onError(int i, String s) {
+                                        Log.d("upload", "onError: "+s);
+                                    }
+                                });
+                            }
+                        }.start();
+
+                    }else {
+                        recruitInfo.setPicUrls(new ArrayList<String>());
+                    }
+                    if (recruitInfo.isHasPic()){
+                        //上传图片的同时 保存了--所以直接退出
+                        break;
+                    }else {
+                        recruitInfo.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e==null){
+                                    String id = recruitInfo.getObjectId();
+                                    recruitInfo.setValue("id",id);
+                                    recruitInfo.update(id, new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                        }
+                                    });
+                                    toast("发布成功！");
+                                    finish();
+                                }else{
+                                    toast("发布失败！");
+                                }
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
                 }
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }

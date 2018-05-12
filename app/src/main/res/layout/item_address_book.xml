@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_height="wrap_content">
+    <!--目录字母-->
+    <TextView
+        android:id="@+id/tv_abk_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:background="#ebebeb"
+        />
+    <LinearLayout
+        android:id="@+id/ll_abk_fellow"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_abk_thumb"
+            android:layout_margin="16dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_abk_fellow"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp"
+                android:textColor="#0b070b"
+                android:text="小明"
+                android:paddingTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+            <TextView
+                android:text="123456"
+                android:id="@+id/tv_abk_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

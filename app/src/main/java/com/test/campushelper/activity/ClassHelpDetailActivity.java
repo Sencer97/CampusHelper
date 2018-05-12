@@ -44,9 +44,8 @@ public class ClassHelpDetailActivity extends BaseActivity implements View.OnClic
     private LinearLayout linearLayout,favorList;        //隐藏item中的赞、评论转发
     private ImageView iv_ignore;                        //隐藏删除图标
     private ShowPicGridView gridView;                   //图片列表和适配器
-    private GridViewAdapter gridViewAdapter;
-    private TextView tv_comment_name,tv_comment_time,tv_helper_name,tv_helper_time,tv_helper_depart,tv_helper_content;
-    private CircleImageView civ_helper_head,civ_comment_head;              //评论者信息
+    private TextView tv_helper_name,tv_helper_time,tv_helper_depart,tv_helper_content;
+    private CircleImageView civ_helper_head;              //评论者信息
     private RecyclerView rv_comments;
     private CommentRecyclerAdapter commentRecyclerAdapter;   //评论列表和适配器
     private List<CommentItem> commentItemList;

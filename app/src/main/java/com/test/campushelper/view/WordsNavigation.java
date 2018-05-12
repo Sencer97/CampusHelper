@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.TextView;
 
 import com.test.campushelper.R;
 
@@ -124,7 +122,5 @@ public class WordsNavigation extends android.support.v7.widget.AppCompatTextView
             }
         }
     }
-
-
 
 }

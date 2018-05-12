@@ -14,7 +14,8 @@ import android.view.View;
 
 import com.test.campushelper.R;
 import com.test.campushelper.adapter.NewsAdapter;
-import com.test.campushelper.model.News;
+import com.test.campushelper.adapter.RecruitAdapter;
+import com.test.campushelper.model.RecruitInfo;
 import com.test.campushelper.utils.Constant;
 
 import java.util.ArrayList;
@@ -25,20 +26,21 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class NewsActivity extends BaseActivity {
+public class RecruitActivity extends BaseActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rv_news;
-    private NewsAdapter adapter;
+    private RecruitAdapter adapter;
     private FloatingActionButton addNewsFab;
-    private List<News> newsList = new ArrayList<>();
+    private List<RecruitInfo> recruitInfoListList = new ArrayList<>();
     private boolean isRefreshing = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_news);
         Bmob.initialize(this, Constant.BMOB_APPKEY);
-        setTitle(getIntent().getStringExtra("title"));
+        setTitle("招聘内推");
         setBackArrow();
         init();
 
@@ -49,27 +51,24 @@ public class NewsActivity extends BaseActivity {
         refreshData();
     }
     public void refreshData() {
-        BmobQuery<News> query = new BmobQuery<>();
-        if (!getIntent().getBooleanExtra("lookAll",true)){
-            //如果是学院管理员  则增加只看当前的通知
-            query.addWhereEqualTo("name",Constant.curUser.getUserName());
-        }
+        BmobQuery<RecruitInfo> query = new BmobQuery<>();
+        //显示所有招聘信息
         query.setLimit(50);       //默认返回10条
-        query.findObjects(new FindListener<News>() {
+        query.findObjects(new FindListener<RecruitInfo>() {
             @Override
-            public void done(List<News> list, BmobException e) {
+            public void done(List<RecruitInfo> list, BmobException e) {
                 if (e==null){
                     if (list.size() != 0){
-                        newsList.clear();
+                        recruitInfoListList.clear();
                         adapter.notifyDataSetChanged();
-                        for (News n: list) {
-                            adapter.addData(0,n);
+                        for (RecruitInfo r: list) {
+                            adapter.addData(0,r);
                         }
                         adapter.notifyDataSetChanged();
-                        Log.d("queryNewsItem", "找到"+list.size()+"条数据");
+                        Log.d("queryRecruitItem", "找到"+list.size()+"条数据");
                     }
                 }else {
-                    Log.d("queryNewsItem", "error "+e.getMessage());
+                    Log.d("queryRecruitItem", "error "+e.getMessage());
                 }
             }
         });
@@ -80,21 +79,21 @@ public class NewsActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rv_news.setLayoutManager(layoutManager);
         //测试item
-        adapter = new NewsAdapter(this,newsList);
+        adapter = new RecruitAdapter(this, recruitInfoListList);
         rv_news.setAdapter(adapter);
         rv_news.setItemAnimator(new DefaultItemAnimator());
-        adapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener(){
+        adapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
-                //直接进入建议详情
-                Constant.curNews = newsList.get(position);
-                startActivity(new Intent(getBaseContext(),NewsDetailActivity.class));
+                //直接进入招聘详情详情
+                Constant.curRecruit = recruitInfoListList.get(position);
+                startActivity(new Intent(getBaseContext(), RecruitDetailActivity.class));
             }
         });
 
         //下拉刷新
         swipeRefreshLayout = findViewById(R.id.srl_news);
-        swipeRefreshLayout.setColorSchemeColors(Color.GREEN,Color.BLUE,Color.RED);
+        swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.BLUE, Color.RED);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -121,10 +120,12 @@ public class NewsActivity extends BaseActivity {
         addNewsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(NewsActivity.this,PublishNewsActivity.class));
+                Intent publishRecruit = new Intent(RecruitActivity.this, PublishNewsActivity.class);
+                publishRecruit.putExtra("title","发布招聘内推");
+                startActivity(publishRecruit);
             }
         });
-        if (!getIntent().getBooleanExtra("showFab",true)){
+        if (!getIntent().getBooleanExtra("showFab", true)) {
             addNewsFab.setVisibility(View.GONE);
         }
     }

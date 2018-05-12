@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+        <EditText
+            android:id="@+id/et_fellow_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="名字(姓名-年级-专业)"
+            android:padding="10dp"
+            />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        app:counterEnabled="true"
+        app:counterMaxLength="11"
+        android:layout_marginTop="20dp"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/et_fellow_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="手机号"
+            android:padding="10dp"
+            android:inputType="phone"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

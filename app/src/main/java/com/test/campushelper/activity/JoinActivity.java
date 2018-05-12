@@ -1,11 +1,13 @@
 package com.test.campushelper.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.view.View;
 
 import com.test.campushelper.R;
 import com.test.campushelper.adapter.AdviceAdapter;
+import com.test.campushelper.model.Attender;
 import com.test.campushelper.model.Match;
 import com.test.campushelper.utils.Constant;
 
@@ -26,6 +29,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class JoinActivity extends BaseActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -53,7 +57,6 @@ public class JoinActivity extends BaseActivity {
         refreshData();
     }
 
-
     private void refreshData() {
         BmobQuery<Match> query = new BmobQuery<>();
         if (!getIntent().getBooleanExtra("lookAll",true)){
@@ -77,13 +80,71 @@ public class JoinActivity extends BaseActivity {
                         }
                         adapter.notifyDataSetChanged();
                         Log.d("matchQuery", "done: 找到"+list.size()+"条数据");
+
+                        if(getIntent().getStringExtra("title").equals("我报名的活动")){
+                            //学生筛选自己报名的活动---遍历每个活动看是否报名
+                            matchList.clear();
+                            for (Match match: list ) {
+                                for(int i=0;i<match.getAtteners().size();i++){
+                                    if(Constant.curUser.getUserName().equals(match.getAtteners().get(i).getName())){
+                                        matchList.add(match);
+                                        adapter.notifyDataSetChanged();
+                                        Log.d("matchQuery", "报名了--"+match.getTitle());
+                                    }
+                                }
+                            }
+                            //设置长按取消报名
+                            adapter.setOnItemLongClickListener(new AdviceAdapter.OnItemLongClickListener() {
+                                @Override
+                                public void onItemLongClick(View view, final int position) {
+                                    //确认取消报名，同时更新数据库的报名列表
+                                    AlertDialog dialog = new AlertDialog.Builder(JoinActivity.this).setTitle("提示")
+                                            .setMessage("确定要取消报名吗？")
+                                            .setPositiveButton("是的", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Match match = matchList.get(position);
+                                                    //遍历报名列表 删除我
+                                                    List<Attender> attenders = match.getAtteners();
+                                                    for(int i=0;i<match.getAtteners().size();i++){
+                                                        if(Constant.curUser.getUserName().equals(match.getAtteners().get(i).getName())){
+                                                            Log.d("matchQuery", "删除报名--- "+match.getAtteners().get(i).getName());
+                                                            attenders.remove(i);
+                                                            break;
+                                                        }
+                                                    }
+                                                    match.setAtteners(attenders);
+                                                    match.update(match.getId(), new UpdateListener() {
+                                                        @Override
+                                                        public void done(BmobException e) {
+                                                            if(e==null){
+                                                                Log.d("matchQuery", "done: 取消成功");
+                                                            }else {
+                                                                Log.d("matchQuery", "error--- "+e.getMessage());
+                                                            }
+
+                                                        }
+                                                    });
+                                                    matchList.remove(position);
+                                                    adapter.notifyItemRemoved(position);
+                                                    adapter.notifyItemRangeChanged(position,matchList.size());
+                                                    toast("取消成功！");
+                                                }
+                                            })
+                                            .setNegativeButton("不了",null)
+                                            .show();
+
+
+                                }
+                            });
+
+                        }
                     }
                 }else {
                     Log.d("matchQuery", "error: "+e.getMessage());
                 }
             }
         });
-
 
     }
     private void init() {
@@ -160,8 +221,11 @@ public class JoinActivity extends BaseActivity {
         switch (item.getItemId()){
             case R.id.menu_more:
                 //调到查看所有活动竞赛界面
-
-                toast("查看更多活动");
+                Intent joinIntent = new Intent(getBaseContext(), JoinActivity.class);
+                joinIntent.putExtra("title","所有活动");
+                joinIntent.putExtra("showFab",false);
+                joinIntent.putExtra("lookAll",true);
+                startActivity(joinIntent);
                 break;
 
 
