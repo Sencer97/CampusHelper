@@ -123,8 +123,6 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
                         }
                     }
                 });
-
-
                 break;
         }
     }

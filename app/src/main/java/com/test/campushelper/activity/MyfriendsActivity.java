@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -128,7 +127,6 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getBaseContext(),AddFriendActivity.class));
-                Snackbar.make(v,"添加好友",Snackbar.LENGTH_SHORT).show();
             }
         });
 
