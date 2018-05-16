@@ -26,6 +26,9 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
+/**
+ * 招聘内推
+ */
 public class RecruitActivity extends BaseActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout;

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<ImageView
+    android:id="@+id/iv_splash_logo"
+    android:src="@drawable/logo"
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    android:layout_marginBottom="109dp"
+    android:layout_above="@+id/tv_app_name"
+    android:layout_centerHorizontal="true" />
+
+<TextView
+    android:id="@+id/tv_app_name"
+    android:text="校园互助APP"
+    android:textSize="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="64dp"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true" />
+</RelativeLayout>

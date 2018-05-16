@@ -32,6 +32,9 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+/**
+ * 招聘信息详情
+ */
 public class RecruitDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private RecruitInfo recruitInfo;

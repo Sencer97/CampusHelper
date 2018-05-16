@@ -27,6 +27,7 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -55,7 +56,9 @@ public class MessageFragment extends Fragment{
 
     //获取数据库中的消息通知
     private void refreshMsg() {
-        if (Constant.curUser == null){
+        if (BmobUser.getCurrentUser() == null){
+            msgList.clear();
+            msgAdapter.notifyDataSetChanged();
             Toast.makeText(getContext(),"请先登录",Toast.LENGTH_SHORT).show();
             return;
         }else{

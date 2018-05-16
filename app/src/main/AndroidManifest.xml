@@ -54,7 +54,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,7 +115,8 @@
         <activity android:name=".activity.RecruitActivity" />
         <activity android:name=".activity.RecruitDetailActivity" />
         <activity android:name=".activity.AddressBookActivity" />
-        <activity android:name=".activity.ViewMyHelpActivity"></activity>
+        <activity android:name=".activity.ViewMyHelpActivity" />
+        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

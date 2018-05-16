@@ -34,6 +34,7 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -201,6 +202,12 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
     }
 
     public void refreshData() {
+        if (BmobUser.getCurrentUser() == null){
+            list_help.clear();
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getContext(),"请先登录",Toast.LENGTH_SHORT).show();
+            return;
+        }
         BmobQuery<ClassHelp> query = new BmobQuery<>();
         query.addWhereEqualTo("tag","help");
         query.setLimit(50);       //默认返回10条
