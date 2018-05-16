@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.test.campushelper.R;
 import com.test.campushelper.model.UserData;
-import com.test.campushelper.model.UserModel;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.utils.PathGetter;
 
@@ -31,6 +30,7 @@ import java.util.List;
 
 import cn.bmob.newim.BmobIM;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -369,7 +369,7 @@ public class UserCenterActivity extends BaseActivity implements View.OnClickList
                             public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.isLogin = false;
                                 //TODO 连接：退出登录需要断开与IM服务器的连接
-                                UserModel.getInstance().logout();
+                                BmobUser.logOut();
                                 BmobIM.getInstance().disConnect();
                                 finish();
                             }

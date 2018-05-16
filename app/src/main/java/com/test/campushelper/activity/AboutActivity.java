@@ -29,12 +29,10 @@ public class AboutActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
         initView();
-//        setTitle("关于");
-//        setBackArrow();
     }
 
     private void initView() {
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationIcon(R.mipmap.ic_back_white_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +42,6 @@ public class AboutActivity extends Activity implements View.OnClickListener{
         updateBtn.setOnClickListener(this);
         floatingActionButton.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -58,7 +55,6 @@ public class AboutActivity extends Activity implements View.OnClickListener{
                         })
                         .show();
                 break;
-
             case R.id.fab_share:
                 //调用系统分享.
                 Intent intent = new Intent();

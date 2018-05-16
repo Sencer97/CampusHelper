@@ -42,34 +42,31 @@ public class SchoolfellowFragment extends Fragment implements View.OnClickListen
 
         ll_book.setOnClickListener(this);
         ll_recruit.setOnClickListener(this);
-
-
-
     }
 
     @Override
     public void onClick(View v) {
-//        if(role == null ){
-//            Constant.showToast(getContext(),"请先登录~");
-//            return;
-//        }
+        if(role == null ){
+            Constant.showToast(getContext(),"请先登录~");
+            return;
+        }
         switch (v.getId()){
             case R.id.ll_fellow_recruit:
 
                 Intent recruitIntent = new Intent(getContext(), RecruitActivity.class);
-//                if (!role.equals(Constant.roles[3])){
-//                    //非校友
-//                    recruitIntent.putExtra("showFab",false);
-//                }
+                if (!role.equals(Constant.roles[3])){
+                    //非校友
+                    recruitIntent.putExtra("showFab",false);
+                }
                 startActivity(recruitIntent);
                 break;
             case R.id.ll_fellow_book:
 
                 Intent fellowIntent = new Intent(getContext(), AddressBookActivity.class);
-//                if (!role.equals(Constant.roles[3])){
-//                    //非校友
-//                    fellowIntent.putExtra("showFab",false);
-//                }
+                if (!role.equals(Constant.roles[3])){
+                    //非校友
+                    fellowIntent.putExtra("showFab",false);
+                }
                 startActivity(fellowIntent);
                 break;
         }

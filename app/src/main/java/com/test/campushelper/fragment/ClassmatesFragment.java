@@ -22,6 +22,7 @@ import com.test.campushelper.R;
 import com.test.campushelper.activity.ClassHelpDetailActivity;
 import com.test.campushelper.activity.ClassHelpPublishActivity;
 import com.test.campushelper.activity.FriendInfoActivity;
+import com.test.campushelper.activity.ViewMyHelpActivity;
 import com.test.campushelper.adapter.ClassHelpAdapter;
 import com.test.campushelper.adapter.GridViewAdapter;
 import com.test.campushelper.model.ClassHelp;
@@ -108,7 +109,7 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
                         case R.id.iv_ignore:
                             //删除
                             AlertDialog dialog = new AlertDialog.Builder(getContext()).setTitle("提示")
-                                    .setMessage("确定删除该动态吗？")
+                                    .setMessage("确定忽略这条帮助吗？")
                                     .setPositiveButton("是的", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -241,8 +242,10 @@ public class ClassmatesFragment extends Fragment implements View.OnClickListener
                 startActivity(publicIntent);
                 break;
             case R.id.fab_menu_other:
-                publicIntent.putExtra("hint","我有酒你有故事吗...");
-                startActivity(publicIntent);
+                //进入查看我发布的帮助
+//                publicIntent.putExtra("hint","我有酒你有故事吗...");
+//                startActivity(publicIntent);
+                startActivity(new Intent(getContext(), ViewMyHelpActivity.class));
                 break;
         }
     }

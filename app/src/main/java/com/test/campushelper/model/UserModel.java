@@ -120,7 +120,6 @@ public class UserModel extends BaseModel {
 
     /**
      * TODO  获取当前用户
-     *
      * @return
      */
     public User getCurrentUser() {
@@ -178,9 +177,9 @@ public class UserModel extends BaseModel {
                         conversation.setConversationTitle(name);
                         info.setName(name);
                         info.setAvatar(avatar);
-                        //TODO 用户管理：2.7、更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
+                        //TODO 用户管理：更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
                         BmobIM.getInstance().updateUserInfo(info);
-                        //TODO 会话：4.7、更新会话资料-如果消息是暂态消息，则不更新会话资料
+                        //TODO 会话：更新会话资料-如果消息是暂态消息，则不更新会话资料
                         if (!msg.isTransient()) {
                             BmobIM.getInstance().updateConversation(conversation);
                         }

@@ -85,7 +85,6 @@ dependencies {
     //文字小图标
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
-
     //okhttp网络库
 //    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
 //    implementation 'com.squareup.okhttp:okhttp:2.4.0'//CDN文件服务使用okhttp相关包进行文件的上传和下载（必填）

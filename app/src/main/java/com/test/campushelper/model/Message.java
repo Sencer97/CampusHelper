@@ -1,56 +1,32 @@
 package com.test.campushelper.model;
 
 
-import java.util.Timer;
+import cn.bmob.v3.BmobObject;
 
-import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMTextMessage;
+public class Message extends BmobObject{
 
-public class Message extends BmobIMMessage{
-    public static final int TYPE_RECEIVED = 0;  //接收到的消息  布局在左边
-    public static final int TYPE_SEND = 1;      //发出去的消息  右边
-    private String nickName;
-    private String content;
-    private String time;
-    private int headId;
-    private int type;
+    private String id;
+    private String fromName;    //消息发送方
+    private String toName;      //消息接收方
+    private String content;     //内容
+    private String time;        //时间
 
-    public int getType() {
-        return type;
+    public Message(){}
+
+    public String getFromName() {
+        return fromName;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-    public Message(){
-
-    }
-    public Message(String msg,String time,int type){
-        this.content = msg;
-        this.time = time;
-        this.type = type;
-    }
-    public Message(String nickName, String message, String time, int headId ) {
-        this.nickName = nickName;
-        this.content = message;
-        this.time = time;
-        this.headId = headId;
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
-    public int getHeadId() {
-        return headId;
+    public String getToName() {
+        return toName;
     }
 
-    public void setHeadId(int headId) {
-        this.headId = headId;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setToName(String toName) {
+        this.toName = toName;
     }
 
     public String getContent() {
@@ -69,5 +45,11 @@ public class Message extends BmobIMMessage{
         this.time = time;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 }

@@ -21,7 +21,6 @@ import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,13 +33,15 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
     private Button deleteBtn,chatBtn;
     private String name,sex,school,depart,major,sign;
     private boolean isFriend = true;
+    private UserData friend;
+    private String friId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_friend_info);
         Bmob.initialize(this, Constant.BMOB_APPKEY);
         setBackArrow();
-        setTitle("好友资料");
+        setTitle("用户资料");
         init();
     }
 
@@ -64,6 +65,7 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
             @Override
             public void done(List<UserData> list, BmobException e) {
                 if (e == null){
+                    friend = list.get(0);
                     sex = list.get(0).getSex();
                     school = list.get(0).getSchool();
                     major = list.get(0).getMajor();
@@ -122,14 +124,25 @@ public class FriendInfoActivity extends BaseActivity implements View.OnClickList
                         .show();
                 break;
             case R.id.btn_chat:
-                User user = BmobUser.getCurrentUser(User.class);
-                BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), "");
-                //TODO 会话： 创建一个常态会话入口，好友聊天
-                BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                Bundle bundle = new Bundle();
-                bundle.putString("title",name);
-                bundle.putSerializable("c", conversationEntrance);
-                startActivity(ChatActivity.class,bundle);
+                BmobQuery<User> query = new BmobQuery<>();
+                query.addWhereEqualTo("username",name);
+                query.findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> list, BmobException e) {
+                        if(e==null){
+                            friId = list.get(0).getId();
+                            BmobIMUserInfo info = new BmobIMUserInfo(friId, name, friend.getHeadUrl());
+                            //TODO 会话： 创建一个常态会话入口，好友聊天  info为好友信息
+                            BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                            Intent chatIntent = new Intent(getBaseContext(),ChatActivity.class);
+                            chatIntent.putExtra("title",name);
+                            chatIntent.putExtra("c", conversationEntrance);
+                            startActivity(chatIntent);
+                        }else{
+                            toast(e.getMessage());
+                        }
+                    }
+                });
                 break;
         }
     }

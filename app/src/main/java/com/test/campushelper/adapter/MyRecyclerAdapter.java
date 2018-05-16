@@ -16,7 +16,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- *  聊天和通知列表适配器
+ *  消息通知列表适配器
  */
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.MyHolder>{
@@ -41,8 +41,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
     @Override
     public void onBindViewHolder(final MyHolder holder, final int position) {
         final Message message = list.get(position);
-        holder.headView.setImageResource(message.getHeadId());
-        holder.nickName.setText(message.getNickName());
+
+        holder.title.setText(message.getFromName()+"评论了你的动态");
         holder.text.setText(message.getContent());
         holder.time.setText(message.getTime());
         if(mItemClickListener != null) {
@@ -50,12 +50,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
                 @Override
                 public void onClick(View v) {
                     mItemClickListener.onItemClick(holder.itemView,position);
-//                    int pos = holder.getAdapterPosition();
-//                    Message m = list.get(pos);
-//                    Toast.makeText(context, "你点击了" + holder.nickName.getText().toString(), Toast.LENGTH_SHORT).show();
-
-                    //TODO 进入聊天界面
-
                 }
             });
         }
@@ -115,13 +109,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter <MyRecyclerAdapter.M
     }
     class MyHolder extends RecyclerView.ViewHolder{
         private CircleImageView headView;
-        private TextView nickName;
+        private TextView title;
         private TextView text;
         private TextView time;
         public MyHolder(View itemView) {
             super(itemView);
             headView = itemView.findViewById(R.id.iv_head);
-            nickName = itemView.findViewById(R.id.tv_user);
+            title = itemView.findViewById(R.id.tv_user);
             text = itemView.findViewById(R.id.tv_message);
             time = itemView.findViewById(R.id.tv_time);
         }

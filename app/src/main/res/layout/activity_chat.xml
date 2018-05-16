@@ -10,28 +10,38 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_message"
         android:layout_width="match_parent"
-        android:layout_height="512dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"></android.support.v7.widget.RecyclerView>
 
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0.5dp"
+        android:background="@color/line" />
     <LinearLayout
         android:id="@+id/ll_chat_bottom"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:background="@android:color/white"
+        >
         <EditText
             android:id="@+id/et_input"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
+            android:textSize="12dp"
+            android:layout_margin="4dp"
             android:layout_weight="1"/>
 
         <Button
             android:id="@+id/btn_chat_send"
-            android:layout_width="47dp"
-            android:layout_height="34dp"
+            android:layout_width="48dp"
+            android:layout_height="36dp"
             android:background="@drawable/matrix_angle_shape"
-            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
             android:text="发送"
             android:textColor="@android:color/white" />
     </LinearLayout>
+
+
 </LinearLayout>

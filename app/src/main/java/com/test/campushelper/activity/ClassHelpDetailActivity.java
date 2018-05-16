@@ -22,14 +22,25 @@ import com.test.campushelper.adapter.CommentRecyclerAdapter;
 import com.test.campushelper.adapter.GridViewAdapter;
 import com.test.campushelper.model.ClassHelp;
 import com.test.campushelper.model.CommentItem;
+import com.test.campushelper.model.Message;
 import com.test.campushelper.model.Notice;
+import com.test.campushelper.model.OfflineMsg;
 import com.test.campushelper.model.Reply;
+import com.test.campushelper.model.User;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.view.ShowPicGridView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMMessage;
+import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.BmobIMClient;
+import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -71,6 +82,7 @@ public class ClassHelpDetailActivity extends BaseActivity implements View.OnClic
         initComments();
         init();
     }
+
 
     /**
      * 初始化评论列表
@@ -130,6 +142,65 @@ public class ClassHelpDetailActivity extends BaseActivity implements View.OnClic
                         }
                     });
                     Log.d("saveComment", "done: 保存评论成功！");
+                    /**
+                     * 发送离线消息通知
+                     */
+                    BmobQuery<User> userQuery = new BmobQuery<>();        //查用户表
+                    userQuery.addWhereEqualTo("username",classHelp.getNickname());
+                    userQuery.findObjects(new FindListener<User>() {
+                        @Override
+                        public void done(final List<User> list, BmobException e) {
+                            if(e==null){
+                                if(list.size()>0){
+                                    final Message msg = new Message();
+                                    msg.setContent(commentStr);
+                                    msg.setFromName(Constant.curUser.getUserName());
+                                    msg.setToName(classHelp.getNickname());
+                                    msg.setTime(Constant.getCurTime());
+                                    msg.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String s, BmobException e) {
+                                            if(e==null){
+                                                msg.setId(msg.getObjectId());
+                                                msg.update(msg.getObjectId(), new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                    }
+                                                });
+                                                Log.d("sendMsg", "done: 离线消息存入数据库成功！！！");
+                                            }else{
+                                                Log.d("sendMsg", "error: 离线消息存入数据库失败"+e.getMessage());
+                                            }
+                                        }
+                                    });
+
+                                    BmobIMUserInfo toInfo = new BmobIMUserInfo(list.get(0).getObjectId(),classHelp.getNickname(),classHelp.getHeadUrl());    //被评论者的信息
+                                    //创建一个暂态会话入口
+                                    BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(toInfo, true, null);
+                                    //根据会话入口获取消息管理，发送离线消息通知
+                                    BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
+                                    //自定义消息
+                                    OfflineMsg bmobIMMessage = new OfflineMsg();
+                                    bmobIMMessage.setContent(commentStr);       //给对方的一个留言信息
+                                    Map<String,Object> map =new HashMap<>();
+                                    map.put("type", "帮助");
+                                    bmobIMMessage.setExtraMap(map);
+                                    messageManager.sendMessage(bmobIMMessage, new MessageSendListener() {
+                                        @Override
+                                        public void done(BmobIMMessage msg, BmobException e) {
+                                            if (e == null) {        //发送成功
+                                                Log.d("sendMsg", "done: 发送离线成功 ");
+                                            }else{
+                                                Log.d("sendMsg", "done: 发送离线失败 "+e.toString());
+                                            }
+                                        }
+                                    });
+                                }
+                            }else{
+                                Log.d("sendMsg", "查找用户失败"+e.getMessage());
+                            }
+                        }
+                    });
                 }else{
                     Log.d("saveComment", "done: 保存评论失败！");
                 }

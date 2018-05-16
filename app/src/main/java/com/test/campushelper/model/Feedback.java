@@ -9,6 +9,7 @@ import cn.bmob.v3.BmobObject;
 public class Feedback extends BmobObject {
     private String text;
     private String email;
+    private String userName;
     public Feedback (){
 
     }
@@ -30,5 +31,13 @@ public class Feedback extends BmobObject {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

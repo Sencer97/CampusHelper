@@ -59,7 +59,7 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_search:
-                //TODO 数据库查询用户
+                //数据库查询用户
                 input = et_search.getText().toString();
                 BmobQuery<UserData> query = new BmobQuery<>();
                 query.addWhereEqualTo("userName",input);
@@ -88,11 +88,18 @@ public class AddFriendActivity extends BaseActivity implements OnClickListener{
                 });
                 break;
             case R.id.btn_add:
-                //TODO 发送加好友请求  待对方确认添加    添加完更新数据库中的的好友列表
+                //添加完更新数据库中的的好友列表
                 Friend friend = new Friend();
                 String name = tv_friendName.getText().toString();
                 friend.setName(name);
                 friend.setHeadIcon(friendHeadUrl);
+                //避免重复添加
+                for (Friend f: Constant.curUser.getFriendList()) {
+                    if(f.getName().equals(name)){
+                        toast("您已添加！");
+                        return;
+                    }
+                }
                 Constant.curUser.getFriendList().add(friend);
                 BmobQuery<UserData> queryUser = new BmobQuery<>();
                 queryUser.addWhereEqualTo("userName",Constant.curUser.getUserName());

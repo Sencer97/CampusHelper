@@ -104,6 +104,7 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
                 }
             });
             list.remove(clickIndex);
+            Collections.sort(list);
             adapter.notifyDataSetChanged();
             isDelete = false;
         }
@@ -113,6 +114,7 @@ public class MyfriendsActivity extends BaseActivity implements WordsNavigation.o
                 Log.d(TAG, "好友: "+f.getName());
             }
             list.add(new Friend(tmpList.get(tmpList.size()-1).getName(),tmpList.get(tmpList.size()-1).getHeadIcon()));
+            Collections.sort(list);
             adapter.notifyDataSetChanged();
             isAdd = false;
         }

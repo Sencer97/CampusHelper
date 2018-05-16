@@ -8,7 +8,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="12dp"
-            android:src="@drawable/head" />
+            />
 
         <TextView
             android:id="@+id/tv_attend_nickname"

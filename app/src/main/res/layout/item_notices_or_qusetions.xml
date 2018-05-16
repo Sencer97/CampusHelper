@@ -22,7 +22,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_margin="12dp"
-                android:src="@drawable/head" />
+                />
 
             <TextView
                 android:id="@+id/tv_notice_name"

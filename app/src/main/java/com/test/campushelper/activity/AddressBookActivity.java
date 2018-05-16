@@ -1,8 +1,14 @@
 package com.test.campushelper.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -93,20 +99,6 @@ public class AddressBookActivity extends BaseActivity implements WordsNavigation
         listView = findViewById(R.id.lv_abk_fellows);
         adapter = new AddressBookListAdapter(this,fellowList);
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                toast("单击了--"+position);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                toast("长按了--"+position);
-                return  true;
-            }
-        });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -119,6 +111,41 @@ public class AddressBookActivity extends BaseActivity implements WordsNavigation
                 }
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final String name = fellowList.get(position).getName();
+                final String phone = fellowList.get(position).getMobile();
+
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AddressBookActivity.this);
+                builder.setTitle(name+":"+phone);
+                builder.setNegativeButton("取消",null);
+                String[] strings = new String[]{"添加到手机联系人","复制手机号"};
+                builder.setItems(strings, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                //添加到手机联系人
+                                addContact(name,phone);
+                                break;
+                            case 1:
+                                //复制手机号
+                                //获取剪贴板管理器
+                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                // 创建普通字符型ClipData
+                                ClipData mClipData = ClipData.newPlainText("Label", phone);
+                                // 将ClipData内容放到系统剪贴板里。
+                                cm.setPrimaryClip(mClipData);
+                                toast("复制成功");
+                                break;
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
         addBtn = findViewById(R.id.fab_addFellow);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,10 +200,25 @@ public class AddressBookActivity extends BaseActivity implements WordsNavigation
 
         wordsNavigation = findViewById(R.id.words_nav_abk);
         tv_word_index = findViewById(R.id.tv_word_index);
-
         wordsNavigation.setOnWordsChangeListener(this);
+    }
 
-
+    /**
+     * 添加联系人
+     * @param name
+     * @param phone
+     */
+    private void addContact(String name, String phone) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setType("vnd.android.cursor.dir/person");
+        intent.setType("vnd.android.cursor.dir/contact");
+        intent.setType("vnd.android.cursor.dir/raw_contact");
+        // 添加姓名
+        intent.putExtra(ContactsContract.Intents.Insert.NAME, name);
+        // 添加手机
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, Phone.TYPE_MOBILE);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, phone);
+        startActivity(intent);
     }
 
     @Override

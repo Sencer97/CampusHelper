@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:src="@drawable/head"
+        android:src="@mipmap/ic_head_128dp"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginTop="50dp"

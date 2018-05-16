@@ -91,10 +91,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                                         Constant.curUser = list.get(0);
                                     }
                                 }
-                        });
+                            });
                             MainActivity.isLogin = true;
                             final User user = BmobUser.getCurrentUser(User.class);
-                            //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
+                            //TODO 连接：登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
                             //判断用户是否登录，并且连接状态不是已连接，则进行连接操作
                             if (!TextUtils.isEmpty(user.getObjectId()) &&
                                     BmobIM.getInstance().getCurrentStatus().getCode() != ConnectionStatus.CONNECTED.getCode()) {

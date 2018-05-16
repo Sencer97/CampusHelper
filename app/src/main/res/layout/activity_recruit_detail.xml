@@ -126,7 +126,8 @@
                 android:id="@+id/btn_comment_send"
                 android:layout_width="47dp"
                 android:layout_height="34dp"
-                android:layout_margin="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/matrix_angle_shape"
                 android:text="发送"
                 android:textColor="@android:color/white" />

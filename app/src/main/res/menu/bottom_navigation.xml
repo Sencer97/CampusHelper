@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/bottom_navigation_teach"
-        android:icon="@drawable/teach"
+        android:icon="@mipmap/ic_nav_teach_128dp"
         android:title="@string/nav_teach" />
 
     <item
         android:id="@+id/bottom_navigation_classmates"
-        android:icon="@drawable/classmates"
+        android:icon="@mipmap/ic_nav_friend_128dp"
         android:title="@string/nav_classmates" />
 
     <item
@@ -18,11 +18,11 @@
 
     <item
         android:id="@+id/bottom_navigation_college"
-        android:icon="@drawable/college"
+        android:icon="@mipmap/ic_nav_college_128dp"
         android:title="@string/nav_college" />
     <item
         android:id="@+id/bottom_navigation_schoolfellow"
-        android:icon="@drawable/schoolfellow"
+        android:icon="@mipmap/ic_nav_fellow_128dp"
         android:title="@string/nav_schoolfellow" />
 
 </menu>

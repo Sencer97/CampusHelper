@@ -114,7 +114,8 @@
         <activity android:name=".activity.MatchDetailActivity" />
         <activity android:name=".activity.RecruitActivity" />
         <activity android:name=".activity.RecruitDetailActivity" />
-        <activity android:name=".activity.AddressBookActivity"></activity>
+        <activity android:name=".activity.AddressBookActivity" />
+        <activity android:name=".activity.ViewMyHelpActivity"></activity>
     </application>
 
 </manifest>

@@ -45,7 +45,6 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="12dp"
-            android:src="@drawable/head"
             android:id="@+id/civ_result_head" />
         <!--显示联系人信息-->
         <TextView

@@ -54,17 +54,17 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-//        if(role==null){
-//            Constant.showToast(getContext(),"请先登录~");
-//            return;
-//        }
+        if(role==null){
+            Constant.showToast(getContext(),"请先登录~");
+            return;
+        }
         switch (v.getId()){
             case R.id.ll_college_notices:
-//             if (!role.equals(Constant.roles[2])){
-//                    //非学院管理员
-//                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
-//                    break;
-//                }
+             if (!role.equals(Constant.roles[2])){
+                    //非学院管理员
+                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
+                    break;
+                }
                 Intent newsIntent = new Intent(getContext(), NewsActivity.class);
                 newsIntent.putExtra("title","新闻公告");
                 newsIntent.putExtra("showFab",true);
@@ -72,11 +72,11 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
                 startActivity(newsIntent);
                 break;
             case R.id.ll_college_match:
-//                if (!role.equals(Constant.roles[2])){
-//                    //非学院管理员
-//                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
-//                    break;
-//                }
+                if (!role.equals(Constant.roles[2])){
+                    //非学院管理员
+                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
+                    break;
+                }
                 Intent matchIntent = new Intent(getContext(), JoinActivity.class);
                 matchIntent.putExtra("title","竞赛活动");
                 matchIntent.putExtra("showFab",true);
@@ -84,11 +84,11 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
                 startActivity(matchIntent);
                 break;
             case R.id.ll_college_advise_box:
-//                if (!role.equals(Constant.roles[2])){
-//                    //非学院管理员
-//                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
-//                    break;
-//                }
+                if (!role.equals(Constant.roles[2])){
+                    //非学院管理员
+                    Constant.showToast(getContext(),"该版块功能仅对学院管理员开放！");
+                    break;
+                }
                 Intent boxIntent = new Intent(getContext(),AdviceActivity.class);
                 boxIntent.putExtra("title","意见箱");
                 boxIntent.putExtra("showFab",false);
@@ -96,11 +96,11 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
                 startActivity(boxIntent);
                 break;
             case R.id.ll_college_view_notices:
-//                if (!role.equals(Constant.roles[0])){
-//                    //非学生
-//                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
-//                    break;
-//                }
+                if (!role.equals(Constant.roles[0])){
+                    //非学生
+                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
+                    break;
+                }
                 Intent viewNewsIntent = new Intent(getContext(), NewsActivity.class);
                 viewNewsIntent.putExtra("title","新闻公告");
                 viewNewsIntent.putExtra("showFab",false);
@@ -109,11 +109,11 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
 
                 break;
             case R.id.ll_college_join:
-//                if (!role.equals(Constant.roles[0])){
-//                    //非学生
-//                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
-//                    break;
-//                }
+                if (!role.equals(Constant.roles[0])){
+                    //非学生
+                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
+                    break;
+                }
                 Intent joinIntent = new Intent(getContext(), JoinActivity.class);
                 joinIntent.putExtra("title","我报名的活动");
                 joinIntent.putExtra("showFab",false);
@@ -121,11 +121,11 @@ public class CollegeFragment extends Fragment implements View.OnClickListener{
                 startActivity(joinIntent);
                 break;
             case R.id.ll_college_advise:
-//                if (!role.equals(Constant.roles[0])){
-//                    //非学生
-//                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
-//                    break;
-//                }
+                if (!role.equals(Constant.roles[0])){
+                    //非学生
+                    Constant.showToast(getContext(),"该版块功能仅对学生开放！");
+                    break;
+                }
                 Intent pushAdviceIntent = new Intent(getContext(),AdviceActivity.class);
                 pushAdviceIntent.putExtra("title","我的意见");
                 pushAdviceIntent.putExtra("showFab",true);

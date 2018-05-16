@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,7 @@ import com.test.campushelper.fragment.CollegeFragment;
 import com.test.campushelper.fragment.MessageFragment;
 import com.test.campushelper.fragment.SchoolfellowFragment;
 import com.test.campushelper.fragment.TeachFragment;
+import com.test.campushelper.model.UserData;
 import com.test.campushelper.utils.Constant;
 import com.test.campushelper.view.BottomNavigationViewHelper;
 
@@ -43,13 +45,16 @@ import java.util.List;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
+import cn.bmob.newim.notification.BmobNotificationManager;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
     private static final String TAG = "MainActivity";
-//    @BindView(R.id.toolbar)
     private Toolbar toolbar;
-//    @BindView(R.id.drawer)
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     //碎片页面
@@ -60,13 +65,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CollegeFragment collegeFragment;
     private SchoolfellowFragment schoolFragment;
 
-//    @BindView(R.id.view_pager_main)
     private ViewPager viewPager;
-//    @BindView(R.id.bottom_navigation_bar)
     private BottomNavigationView bottomNavigationView;
     private MenuItem menuItem;
 
-//    @BindView(R.id.nav_view)
     private NavigationView navigationView;
 
     private CircleImageView headIcon;
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return false;
         }
     };
-
     /**
      * 修改标题 和 页面
      * @param title 标题
@@ -116,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        ButterKnife.bind(this);
         initView();
 //        IntentFilter filter = new IntentFilter(LoginActivity.action);
 //        registerReceiver(broadcastReceiver, filter);
@@ -236,24 +236,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-         if(isLogin){
-             nickName.setText(Constant.curUser.getUserName());
-             nickName.setVisibility(View.VISIBLE);
-             loginBtn.setVisibility(View.GONE);
-             //使用Glide加载头像
-             Glide.with(this)
-                     .load(Constant.curUser.getHeadUrl())
-                     .placeholder(R.drawable.ic_image_loading)
-                     .error(R.drawable.ic_empty_picture)
-                     .crossFade()
-                     .into(headIcon);
-
-
-
+        BmobNotificationManager.getInstance(this).cancelNotification();
+        /**
+         * 监测登录状态
+         */
+        if(BmobUser.getCurrentUser()!=null){
+            Log.d("sencer", "当前用户: "+ BmobUser.getCurrentUser().getUsername());
+            BmobQuery<UserData> query = new BmobQuery<>();
+            query.addWhereEqualTo("userName",BmobUser.getCurrentUser().getUsername());
+            query.findObjects(new FindListener<UserData>() {
+                @Override
+                public void done(List<UserData> list, BmobException e) {
+                    if(e==null){
+                        if(list.size()>0){
+                            Constant.curUser = list.get(0);
+                            isLogin = true;
+                            if(isLogin){
+                                nickName.setText(Constant.curUser.getUserName());
+                                nickName.setVisibility(View.VISIBLE);
+                                loginBtn.setVisibility(View.GONE);
+                                //使用Glide加载头像
+                                Glide.with(getBaseContext())
+                                        .load(Constant.curUser.getHeadUrl())
+                                        .placeholder(R.drawable.ic_image_loading)
+                                        .error(R.drawable.ic_empty_picture)
+                                        .crossFade()
+                                        .into(headIcon);
+                            }else{
+                            }
+                        }
+                    }
+                }
+            });
         }else{
+            Log.d("sencer", "未登录...");
             nickName.setVisibility(View.GONE);
             loginBtn.setVisibility(View.VISIBLE);
-            headIcon.setImageResource(R.drawable.head);
+            headIcon.setImageResource(R.mipmap.ic_head_128dp);
         }
     }
     /**
@@ -264,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO 消息接收：通知有在线消息接收
     @Subscribe
     public void onEventMainThread(MessageEvent event) {
-
+        Log.d(TAG, "onEventMainThread: 收到在线消息--->>" +event.getMessage().getContent());
     }
 
     /**
@@ -275,18 +294,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //TODO 消息接收：通知有离线消息接收
     @Subscribe
     public void onEventMainThread(OfflineMessageEvent event) {
-
+        Log.d(TAG, "onEventMainThread: 收到离线消息--->>");
     }
 
     /**
      * 注册自定义消息接收事件
-     *
      * @param event
      */
     //TODO 消息接收：通知有自定义消息接收
     @Subscribe
     public void onEventMainThread(RefreshEvent event) {
-
+        Log.d(TAG, "收到自定义消息");
     }
     @Override
     public void onStart() {
@@ -302,9 +320,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        unregisterReceiver(broadcastReceiver);
-        isLogin = false;
-        BmobIM.getInstance().disConnect();
         BmobIM.getInstance().clear();
     }
 
@@ -317,14 +332,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent userIntent = new Intent(this,UserCenterActivity.class);
 //                    userIntent.putExtra("nick",nickName.getText());
                     startActivity(userIntent);
-                }else{
-                    Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.nav_relation:     //与我有关
-                if (isLogin){
-                    intent.setClass(this,RelativeActivity.class);
-                    startActivity(intent);
                 }else{
                     Toast.makeText(getBaseContext(),"请先登录~",Toast.LENGTH_SHORT).show();
                 }

@@ -46,29 +46,35 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                 //提交反馈
                 text = contentET.getText().toString();
                 email = emailET.getText().toString();
-                Feedback feedbackObj = new Feedback(text,email);
                 if(text.equals("")){
                     contentET.setError("亲~反馈不能为空哦！");
                 }else if (!Pattern.matches("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",email)){
                     emailET.setError("请输入有效的邮箱~");
-
                 }else{
-                    feedbackObj.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String s, BmobException e) {
-                            if(e == null){
-                                Toast.makeText(getBaseContext(),"反馈成功！",Toast.LENGTH_SHORT).show();
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finish();
-                                    }
-                                },2000);
-                            }else {
-                                Toast.makeText(getBaseContext(),"反馈失败！请查看网络连接~",Toast.LENGTH_SHORT).show();
+
+                    if(Constant.curUser == null){
+                        toast("请先登录~");
+                        break;
+                    }else{
+                        Feedback feedbackObj = new Feedback(text,email);
+                        feedbackObj.setUserName(Constant.curUser.getUserName());
+                        feedbackObj.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if(e == null){
+                                    Toast.makeText(getBaseContext(),"反馈成功！",Toast.LENGTH_SHORT).show();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+                                        }
+                                    },2000);
+                                }else {
+                                    Toast.makeText(getBaseContext(),"反馈失败！请查看网络连接~",Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
                 break;
         }

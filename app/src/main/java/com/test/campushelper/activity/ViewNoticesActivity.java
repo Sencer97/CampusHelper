@@ -64,7 +64,6 @@ public class ViewNoticesActivity extends BaseActivity {
                 if (e==null){
                     if (list.size() != 0){
                         noticeList.clear();
-                        adapter.notifyDataSetChanged();
                         for (Notice notice: list) {
                             adapter.addData(0,notice);
                         }
